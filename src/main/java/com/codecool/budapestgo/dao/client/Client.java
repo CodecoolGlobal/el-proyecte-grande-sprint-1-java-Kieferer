@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.data.client;
+package com.codecool.budapestgo.dao.client;
 
 import com.codecool.budapestgo.data.ClientCategoryType;
 import jakarta.persistence.*;
