@@ -1,16 +1,18 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.ClientDTO;
+import com.codecool.budapestgo.controller.dto.ClientRegisterDTO;
+import com.codecool.budapestgo.controller.dto.ClientUpdateDTO;
 import com.codecool.budapestgo.service.ClientService;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/client/")
+@RestController
+@RequestMapping("/client")
 public class ClientController {
-    private ClientService clientService;
+    private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
@@ -23,5 +25,12 @@ public class ClientController {
     public void deleteClient(@PathVariable int id){
         clientService.deleteClientById(id);
     }
-
+    @PostMapping("/register")
+    public void registerClient(@RequestBody ClientRegisterDTO clientRegisterDTO){
+        clientService.addClient(clientRegisterDTO);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateClient(@RequestBody ClientUpdateDTO clientUpdateDTO){
+        return clientService.updateClient(clientUpdateDTO);
+    }
 }
