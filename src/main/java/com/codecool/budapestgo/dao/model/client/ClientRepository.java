@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.client;
+package com.codecool.budapestgo.dao.model.client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

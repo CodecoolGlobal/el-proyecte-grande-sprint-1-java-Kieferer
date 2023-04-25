@@ -1,10 +1,10 @@
 package com.codecool.budapestgo.service;
 
-import com.codecool.budapestgo.controller.dto.ClientDTO;
-import com.codecool.budapestgo.controller.dto.ClientRegisterDTO;
-import com.codecool.budapestgo.controller.dto.ClientUpdateDTO;
-import com.codecool.budapestgo.dao.client.Client;
-import com.codecool.budapestgo.dao.client.ClientRepository;
+import com.codecool.budapestgo.controller.dto.client.ClientDTO;
+import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
+import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
+import com.codecool.budapestgo.dao.model.client.Client;
+import com.codecool.budapestgo.dao.model.client.ClientRepository;
 import com.codecool.budapestgo.data.ClientCategoryType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
