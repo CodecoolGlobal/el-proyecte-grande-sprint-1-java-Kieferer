@@ -5,15 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@Builder
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Entity
 public class Client {
     @Id
-    @SequenceGenerator(
-            name = "client_id_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE
     )
