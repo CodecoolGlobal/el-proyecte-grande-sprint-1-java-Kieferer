@@ -1,4 +1,4 @@
 package com.codecool.budapestgo.controller.dto;
 
-public class ClientRegisterDTO {
+public record ClientRegisterDTO(String email,String password) {
 }
