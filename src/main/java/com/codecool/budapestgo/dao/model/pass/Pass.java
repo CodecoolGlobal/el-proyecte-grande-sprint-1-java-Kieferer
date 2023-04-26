@@ -14,12 +14,10 @@ import java.time.LocalDate;
 public class Pass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final Integer pass_id;
+    private final Integer id;
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private final Client client;
-    @NonNull
-    private final Integer client_id;
     @Enumerated(EnumType.STRING)
     @NonNull
     private final PassType passType;
