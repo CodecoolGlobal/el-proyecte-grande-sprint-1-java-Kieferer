@@ -81,4 +81,15 @@ class RouteServiceTest {
         assertEquals("Route updated", response.getBody());
         assertEquals(newName,route.getName());
     }
+
+    @Test
+    void testUpdateRouteWhenRouteNotExist() {
+        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(1,"9");
+        when(routeRepository.findById(1)).thenReturn(Optional.empty());
+
+        ResponseEntity<String> response = routeService.updateRoute(updateRouteDTO);
+
+        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals("Route not found", response.getBody());
+    }
 }
