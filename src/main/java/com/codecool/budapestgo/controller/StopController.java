@@ -29,7 +29,7 @@ public class StopController {
     public void deleteStop(@PathVariable int id){
         stopService.deleteStopById(id);
     }
-    @PostMapping("/register")
+    @PostMapping("/add")
     public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO){
        return stopService.addStop(stopDTO);
     }
