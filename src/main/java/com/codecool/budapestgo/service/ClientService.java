@@ -21,25 +21,31 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
     public List<ClientDTO> getAllClient(){
-    return clientRepository.findAll()
-                           .stream()
-                           .map(ClientDTO::of)
-                           .toList();
+        return clientRepository.findAll()
+                .stream()
+                .map(ClientDTO::of)
+                .toList();
     }
-    public Optional<ClientDTO> getClientById(Integer id){
+    public ResponseEntity<ClientDTO> getClientById(Integer id){
         return clientRepository.findById(id)
-                .map(ClientDTO::of);
+                .map(client ->  ResponseEntity.ok(ClientDTO.of(client)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
     public void deleteClientById(Integer id){
         clientRepository.deleteById(id);
     }
-    public void addClient(ClientRegisterDTO clientToRegister){
-        Client client = Client.builder()
-                .email(clientToRegister.email())
-                .password(clientToRegister.password())
-                .type(ClientCategoryType.CUSTOMER)
-                .build();
-        clientRepository.save(client);
+    public ResponseEntity<String> addClient(ClientRegisterDTO clientToRegister){
+        Optional<Client> searchedClient = clientRepository.findClientByEmail(clientToRegister.email());
+        if(searchedClient.isEmpty()) {
+            Client client = Client.builder()
+                    .email(clientToRegister.email())
+                    .password(clientToRegister.password())
+                    .type(ClientCategoryType.CUSTOMER)
+                    .build();
+            clientRepository.save(client);
+            return ResponseEntity.ok("User created");
+        }
+        return ResponseEntity.badRequest().body("User with that email already exist.");
     }
     public ResponseEntity<String> updateClient(ClientUpdateDTO updateClient){
         Optional<Client> client = clientRepository.findById(updateClient.id());

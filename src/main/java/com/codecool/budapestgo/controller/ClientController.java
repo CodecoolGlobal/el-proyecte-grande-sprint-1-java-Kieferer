@@ -26,10 +26,10 @@ public class ClientController {
         clientService.deleteClientById(id);
     }
     @PostMapping("/register")
-    public void registerClient(@RequestBody ClientRegisterDTO clientRegisterDTO){
-        clientService.addClient(clientRegisterDTO);
+    public ResponseEntity<String> registerClient(@RequestBody ClientRegisterDTO clientRegisterDTO){
+       return clientService.addClient(clientRegisterDTO);
     }
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<String> updateClient(@RequestBody ClientUpdateDTO clientUpdateDTO){
         return clientService.updateClient(clientUpdateDTO);
     }
