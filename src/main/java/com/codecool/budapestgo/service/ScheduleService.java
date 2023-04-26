@@ -44,4 +44,9 @@ public class ScheduleService {
     public List<Schedule> getAllSchedule() {
         return scheduleRepository.findAll();
     }
+
+    public List<Stop> getStopsOfRouteByName(String name) {
+        List<Schedule> schedules = scheduleRepository.findByRouteName(name);
+        return schedules.stream().map(Schedule::getStop).toList();
+    }
 }
