@@ -2,6 +2,7 @@ package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.NewRouteDTO;
 import com.codecool.budapestgo.controller.dto.RouteDTO;
+import com.codecool.budapestgo.controller.dto.UpdateRouteDTO;
 import com.codecool.budapestgo.dao.Route.Route;
 import com.codecool.budapestgo.dao.Route.RouteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -63,6 +67,18 @@ class RouteServiceTest {
     }
 
     @Test
-    void testUpdateRoute() {
+    void testUpdateRouteWhenRouteExist() {
+        int id = 1;
+        String newName= "Updated Route";
+        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,newName);
+        Route route = new Route(id,"Old Route");
+        when(routeRepository.findById(id)).thenReturn(Optional.of(route));
+        when(routeRepository.save(route)).thenReturn(route);
+
+        ResponseEntity<String> response = routeService.updateRoute(updateRouteDTO);
+
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals("Route updated", response.getBody());
+        assertEquals(newName,route.getName());
     }
 }
