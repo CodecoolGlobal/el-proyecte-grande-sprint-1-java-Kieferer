@@ -3,7 +3,6 @@ package com.codecool.budapestgo.service;
 import com.codecool.budapestgo.controller.dto.RouteDTO;
 import com.codecool.budapestgo.dao.Route.Route;
 import com.codecool.budapestgo.dao.Route.RouteRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class RouteServiceTest {
@@ -29,7 +28,7 @@ class RouteServiceTest {
     }
 
     @Test
-    void getAllRoutes() {
+    void testGetAllRoute() {
         List<Route> routes = new ArrayList<>();
         Route routeOne = new Route(1,"9");
         Route routeTwo = new Route(2,"M3");
@@ -47,23 +46,10 @@ class RouteServiceTest {
     }
 
     @Test
-    void deleteRoute() {
-    }
-
-    @Test
-    void addRoute() {
-    }
-
-    @Test
-    void updateRoute() {
-    }
-
-    @Test
-    void testGetAllRoutes() {
-    }
-
-    @Test
     void testDeleteRoute() {
+        int id = 1;
+        routeService.deleteRoute(1);
+        verify(routeRepository ,times(1)).deleteById(id);
     }
 
     @Test
