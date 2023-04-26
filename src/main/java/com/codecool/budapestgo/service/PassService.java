@@ -37,4 +37,10 @@ public class PassService {
         return passRepository.findById(id)
                 .map(PassDTO::of);
     }
+    public List<Pass> getExpiredPasses(){
+        return passRepository.getAllExpiredPasses(LocalDate.now());
+    }
+    public List<Pass> getActivePasses(){
+        return passRepository.getActivePasses(LocalDate.now());
+    }
 }
