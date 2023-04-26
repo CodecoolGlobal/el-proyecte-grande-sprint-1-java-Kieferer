@@ -10,15 +10,14 @@ import lombok.*;
 @AllArgsConstructor()
 @Entity
 public class Stop {
-
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE
     )
     private final Integer id;
-    @NonNull private String name;
+    @NonNull
+    private String name;
     @Embedded
-    @NonNull private Point location;
-
-
+    @NonNull
+    private Point location;
 }
