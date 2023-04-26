@@ -1,5 +1,6 @@
 package com.codecool.budapestgo.dao.model.pass;
 
+import com.codecool.budapestgo.dao.model.client.Client;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,9 +15,9 @@ public class Pass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private final Integer pass_id;
-   /* @OneToOne()
-    @JoinColumn(table = "client", name = "id", referencedColumnName = "id")
-    private final Client client;*/
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private final Client client;
     @NonNull
     private final Integer client_id;
     @Enumerated(EnumType.STRING)
