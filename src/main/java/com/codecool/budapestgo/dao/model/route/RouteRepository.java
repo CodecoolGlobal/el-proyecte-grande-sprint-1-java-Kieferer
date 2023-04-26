@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.Route;
+package com.codecool.budapestgo.dao.model.route;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

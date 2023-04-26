@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.Route;
+package com.codecool.budapestgo.dao.model.route;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
