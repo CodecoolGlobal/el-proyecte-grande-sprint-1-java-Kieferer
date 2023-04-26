@@ -2,6 +2,7 @@ package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
 import com.codecool.budapestgo.dao.model.schedule.Schedule;
+import com.codecool.budapestgo.dao.model.stop.Stop;
 import com.codecool.budapestgo.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,10 @@ public class ScheduleController {
     @GetMapping("/{name}")
     public List<Schedule> getScheduleByRouteId(@PathVariable String name){
         return scheduleService.getRouteSchedule(name);
+    }
+    @GetMapping("/stops/{name}")
+    public List<Stop> getStopsOfRouteByName(@PathVariable String name){
+        return scheduleService.getStopsOfRouteByName(name);
     }
     @GetMapping("/all")
     public List<Schedule> getAllSchedule(){
