@@ -21,14 +21,14 @@ public class StopController {
         return stopService.getAllStops();
     }
     @DeleteMapping("/{id}")
-    public void deleteStop(@PathVariable int id){
-        stopService.deleteStopById(id);
+    public ResponseEntity<String> deleteStop(@PathVariable int id){
+      return stopService.deleteStopById(id);
     }
     @PostMapping("/register")
-    public void registerStop(@RequestBody StopDTO stopDTO){
-        stopService.addStop(stopDTO);
+    public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO) {
+      return stopService.addStop(stopDTO);
     }
-    @PutMapping()
+    @PutMapping("/")
     public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
         return stopService.updateStop(stopDTO);
     }

@@ -19,7 +19,12 @@ public class StopService {
     public StopService(StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
-
+    public boolean existsById(Integer id) {
+        return stopRepository.findById(id).isPresent();
+    }
+    public boolean existsByName(String name) {
+        return stopRepository.getStopByName(name).isPresent();
+    }
     public List<StopDTO> getAllStops() {
         return stopRepository.findAll()
                 .stream()
@@ -35,16 +40,26 @@ public class StopService {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public void deleteStopById(Integer id) {
-        stopRepository.deleteById(id);
+    public ResponseEntity<String> deleteStopById(Integer id) {
+        if(existsById(id)) {
+            stopRepository.deleteById(id);
+            return ResponseEntity.ok("Stop deleted.");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Stop not found.");
     }
 
-    public void addStop(StopDTO stopDTO) {
-        Stop stop = Stop.builder()
-                .name(stopDTO.name())
-                .location(new Point(stopDTO.latitude(),stopDTO.longitude()))
-                .build();
-        stopRepository.save(stop);
+    public ResponseEntity<String> addStop(StopDTO stopDTO) {
+        if(!existsByName(stopDTO.name())) {
+            Stop stop = Stop.builder()
+                    .name(stopDTO.name())
+                    .location(new Point(stopDTO.latitude(), stopDTO.longitude()))
+                    .build();
+            stopRepository.save(stop);
+            return ResponseEntity.ok("Stop created");
+        }
+        return ResponseEntity.badRequest()
+                .body("Stop already exist.");
     }
 
     public ResponseEntity<String> updateStop(StopDTO stopDTO) {
@@ -54,6 +69,7 @@ public class StopService {
             stopRepository.save(stop.get());
             return ResponseEntity.ok("Stop updated");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stop not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Stop not found");
     }
 }
