@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -55,5 +56,19 @@ public class ClientService {
             return ResponseEntity.ok("Client updated");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+    }
+
+    public Client login(String email, String password) {
+        Optional<Client> client = clientRepository.findClientByEmail(email);
+        if (client.isPresent()){
+            if (client.get().getPassword().equals(password))
+                return client.get();
+            else
+                //TODO: costume exception for bad password
+                throw new RuntimeException();
+        }
+        else
+            //TODO: costume exception for bad email
+            throw new NoSuchElementException();
     }
 }
