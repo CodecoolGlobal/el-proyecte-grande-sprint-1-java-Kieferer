@@ -19,7 +19,12 @@ public class StopService {
     public StopService(StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
-
+    public boolean existsById(Integer id) {
+        return stopRepository.findById(id).isPresent();
+    }
+    public boolean existsByName(String name) {
+        return stopRepository.getStopByName(name).isPresent();
+    }
     public List<StopDTO> getAllStops() {
         return stopRepository.findAll()
                 .stream()
@@ -36,18 +41,16 @@ public class StopService {
     }
 
     public ResponseEntity<String> deleteStopById(Integer id) {
-        Optional<Stop> searchedStop = stopRepository.findById(id);
-        if(searchedStop.isPresent()) {
+        if(existsById(id)) {
             stopRepository.deleteById(id);
             return ResponseEntity.ok("Stop deleted.");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Stop with" + id + " don't exist.");
+                .body("Stop not found.");
     }
 
     public ResponseEntity<String> addStop(StopDTO stopDTO) {
-        Optional<Stop> searchedStop = stopRepository.getStopByName(stopDTO.name());
-        if(searchedStop.isEmpty()) {
+        if(!existsByName(stopDTO.name())) {
             Stop stop = Stop.builder()
                     .name(stopDTO.name())
                     .location(new Point(stopDTO.latitude(), stopDTO.longitude()))
