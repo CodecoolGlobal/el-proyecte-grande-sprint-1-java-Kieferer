@@ -39,12 +39,17 @@ public class StopService {
         stopRepository.deleteById(id);
     }
 
-    public void addStop(StopDTO stopDTO) {
-        Stop stop = Stop.builder()
-                .name(stopDTO.name())
-                .location(new Point(stopDTO.latitude(),stopDTO.longitude()))
-                .build();
-        stopRepository.save(stop);
+    public ResponseEntity<String> addStop(StopDTO stopDTO) {
+       Optional<Stop> searchedStop = stopRepository.getStopByName(stopDTO.name());
+       if(searchedStop.isEmpty()) {
+           Stop stop = Stop.builder()
+                   .name(stopDTO.name())
+                   .location(new Point(stopDTO.latitude(), stopDTO.longitude()))
+                   .build();
+           stopRepository.save(stop);
+           return ResponseEntity.ok("Stop created");
+       }
+       return ResponseEntity.badRequest().body("Stop is already exist.");
     }
 
     public ResponseEntity<String> updateStop(StopDTO stopDTO) {

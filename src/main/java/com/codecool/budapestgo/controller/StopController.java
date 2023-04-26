@@ -30,8 +30,8 @@ public class StopController {
         stopService.deleteStopById(id);
     }
     @PostMapping("/register")
-    public void registerStop(@RequestBody StopDTO stopDTO){
-        stopService.addStop(stopDTO);
+    public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO){
+       return stopService.addStop(stopDTO);
     }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
