@@ -26,7 +26,7 @@ public class ScheduleService {
 
     public void addSchedule(ScheduleDTO scheduleDTO){
         Optional<Route> route = routeRepository.getRouteByName(scheduleDTO.routeName());
-        Optional<Stop> stop = stopRepository.getStopByName(scheduleDTO.routeName());
+        Optional<Stop> stop = stopRepository.getStopByName(scheduleDTO.stopName());
 
         if (route.isEmpty() || stop.isEmpty())
             throw new RuntimeException("There is no matching route or stop");

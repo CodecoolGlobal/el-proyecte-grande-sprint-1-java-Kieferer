@@ -2,8 +2,6 @@ package com.codecool.budapestgo.dao.model.stop;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 @Builder
 @Getter
@@ -17,7 +15,9 @@ public class Stop {
             strategy = GenerationType.SEQUENCE
     )
     private final Integer id;
-    @NonNull private String name;
+    @NonNull
+    private String name;
     @Embedded
-    @NonNull private Point location;
+    @NonNull
+    private Point location;
 }
