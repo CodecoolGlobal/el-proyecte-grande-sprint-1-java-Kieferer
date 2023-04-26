@@ -1,5 +1,6 @@
 package com.codecool.budapestgo.service;
 
+import com.codecool.budapestgo.controller.dto.NewRouteDTO;
 import com.codecool.budapestgo.controller.dto.RouteDTO;
 import com.codecool.budapestgo.dao.Route.Route;
 import com.codecool.budapestgo.dao.Route.RouteRepository;
@@ -49,11 +50,16 @@ class RouteServiceTest {
     void testDeleteRoute() {
         int id = 1;
         routeService.deleteRoute(1);
+
         verify(routeRepository ,times(1)).deleteById(id);
     }
 
     @Test
     void testAddRoute() {
+        NewRouteDTO newRouteDTO = new NewRouteDTO("9");
+        routeService.addRoute(newRouteDTO);
+
+        verify(routeRepository, times(1)).save(argThat(route -> route.getName().equals(newRouteDTO.name())));
     }
 
     @Test
