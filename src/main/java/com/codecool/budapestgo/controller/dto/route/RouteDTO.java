@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.controller.dto;
+package com.codecool.budapestgo.controller.dto.route;
 
 import com.codecool.budapestgo.dao.Route.Route;
 

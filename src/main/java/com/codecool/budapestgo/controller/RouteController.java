@@ -1,8 +1,8 @@
 package com.codecool.budapestgo.controller;
 
-import com.codecool.budapestgo.controller.dto.NewRouteDTO;
-import com.codecool.budapestgo.controller.dto.RouteDTO;
-import com.codecool.budapestgo.controller.dto.UpdateRouteDTO;
+import com.codecool.budapestgo.controller.dto.route.NewRouteDTO;
+import com.codecool.budapestgo.controller.dto.route.RouteDTO;
+import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
 import com.codecool.budapestgo.service.RouteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
