@@ -1,14 +1,15 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.pass.PassDTO;
+import com.codecool.budapestgo.controller.dto.pass.PassResponseDTO;
 import com.codecool.budapestgo.dao.model.pass.Pass;
 import com.codecool.budapestgo.dao.model.pass.PassRepository;
 import com.codecool.budapestgo.dao.model.pass.PassType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PassService {
@@ -17,30 +18,33 @@ public class PassService {
     public PassService(PassRepository passRepository) {
         this.passRepository = passRepository;
     }
-    public List<PassDTO> getAllPass(){
-        return passRepository.findAll().stream().map(PassDTO::of) .toList();
+    public List<PassResponseDTO> getAllPass(){
+        return passRepository.findAll().stream().map(PassResponseDTO::of) .toList();
     }
 
-    public void addPass(PassDTO passDTO){
-        PassType type = PassType.valueOf(passDTO.getPassType());
+    public ResponseEntity<String> addPass(PassDTO passDTO){
+        PassType type = PassType.valueOf(passDTO.passType());
 
         Pass pass = Pass.builder()
-                        .client_id(passDTO.getClientId())
+                        .client_id(passDTO.clientId())
                         .passType(type)
                         .startTime(LocalDate.now())
                         .expireTime(Pass.calculateExpireTime(LocalDate.now(),type))
                         .build();
 
         passRepository.save(pass);
+        return ResponseEntity.ok("Pass have been purchased");
     }
-    public Optional<PassDTO> getClientById(Integer id){
-        return passRepository.findById(id)
-                .map(PassDTO::of);
+    public List<PassResponseDTO> getExpiredPasses(Integer id){
+        return passRepository.getAllExpiredPassesByClient_id(id,LocalDate.now())
+                .stream()
+                .map(PassResponseDTO::of)
+                .toList();
     }
-    public List<Pass> getExpiredPasses(){
-        return passRepository.getAllExpiredPasses(LocalDate.now());
-    }
-    public List<Pass> getActivePasses(){
-        return passRepository.getActivePasses(LocalDate.now());
+    public List<PassResponseDTO> getActivePasses(Integer id){
+        return passRepository.getActivePassesByClient_id(id,LocalDate.now())
+                .stream()
+                .map(PassResponseDTO::of)
+                .toList();
     }
 }
