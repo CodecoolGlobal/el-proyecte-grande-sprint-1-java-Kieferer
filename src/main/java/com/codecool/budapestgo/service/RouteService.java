@@ -1,8 +1,8 @@
 package com.codecool.budapestgo.service;
 
-import com.codecool.budapestgo.controller.dto.NewRouteDTO;
-import com.codecool.budapestgo.controller.dto.RouteDTO;
-import com.codecool.budapestgo.controller.dto.UpdateRouteDTO;
+import com.codecool.budapestgo.controller.dto.route.NewRouteDTO;
+import com.codecool.budapestgo.controller.dto.route.RouteDTO;
+import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
 import com.codecool.budapestgo.dao.Route.Route;
 import com.codecool.budapestgo.dao.Route.RouteRepository;
 import org.springframework.http.HttpStatus;
