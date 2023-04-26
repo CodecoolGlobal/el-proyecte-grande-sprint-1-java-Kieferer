@@ -29,4 +29,5 @@ public class Pass {
     public static LocalDate calculateExpireTime(LocalDate startTime, PassType passType){
         return startTime.plusDays(passType.getExpireInDay());
     }
+
 }
