@@ -20,20 +20,15 @@ public class StopController {
     public List<StopDTO> getAllStop(){
         return stopService.getAllStops();
     }
-    @GetMapping("{id}")
-    public ResponseEntity<StopDTO> getAllStop(@PathVariable int id){
-        return stopService.getStopById(id);
-    }
-
     @DeleteMapping("/{id}")
-    public void deleteStop(@PathVariable int id){
-        stopService.deleteStopById(id);
+    public ResponseEntity<String> deleteStop(@PathVariable int id){
+      return stopService.deleteStopById(id);
     }
-    @PostMapping("/register")
-    public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO){
-       return stopService.addStop(stopDTO);
+    @PostMapping("/add")
+    public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO) {
+      return stopService.addStop(stopDTO);
     }
-    @PutMapping("/{id}")
+    @PutMapping("/")
     public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
         return stopService.updateStop(stopDTO);
     }
