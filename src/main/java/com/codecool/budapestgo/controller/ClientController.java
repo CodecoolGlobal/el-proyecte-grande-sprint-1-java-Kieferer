@@ -44,6 +44,7 @@ public class ClientController {
         return clientService.updateClient(clientUpdateDTO);
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest, HttpServletResponse response) {
         String email = loginRequest.get("email");
