@@ -36,4 +36,8 @@ public class ScheduleController {
     public void deleteScheduleById(@PathVariable int id){
         scheduleService.deleteScheduleById(id);
     }
+    @DeleteMapping("/{routeName}")
+    public void deleteSchedulesByRouteName(@PathVariable String routeName){
+        scheduleService.deleteSchedulesByRouteName(routeName);
+    }
 }
