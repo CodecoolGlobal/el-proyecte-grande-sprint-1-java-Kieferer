@@ -31,11 +31,12 @@ public class PassService {
         Optional<Client> client = clientRepository.findById(passDTO.clientId());
         if(client.isPresent()) {
             PassType type = PassType.valueOf(passDTO.passType());
+            LocalDate date = LocalDate.now();
             Pass pass = Pass.builder()
                     .client(client.get())
                     .passType(type)
-                    .startTime(LocalDate.now())
-                    .expireTime(Pass.calculateExpireTime(LocalDate.now(), type))
+                    .startTime(date)
+                    .expireTime(Pass.calculateExpireTime(date,type))
                     .build();
 
             passRepository.save(pass);

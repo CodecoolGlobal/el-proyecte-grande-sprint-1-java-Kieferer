@@ -20,12 +20,12 @@ public class PassController {
     public List<PassResponseDTO> getAllPass(){
         return passService.getAllPass();
     }
-    @GetMapping("/active")
-    public List<PassResponseDTO> getActivePasses(@RequestBody Integer id){
+    @GetMapping("/active/{id}")
+    public List<PassResponseDTO> getActivePasses(@PathVariable Integer id){
         return passService.getActivePasses(id);
     }
-    @GetMapping("/expired")
-    public List<PassResponseDTO> getExpiredPasses(@RequestBody Integer id){
+    @GetMapping("/expired/{id}")
+    public List<PassResponseDTO> getExpiredPasses(@PathVariable Integer id){
         return passService.getExpiredPasses(id);
     }
 
