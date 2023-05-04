@@ -46,13 +46,13 @@ public class PassService {
                 .body("Client not found.");
     }
     public List<PassResponseDTO> getExpiredPasses(Integer id){
-        return passRepository.getAllExpiredPassesByClient_id(id,LocalDate.now())
+        return passRepository.getAllExpiredPassesByClient_id(id)
                 .stream()
                 .map(PassResponseDTO::of)
                 .toList();
     }
     public List<PassResponseDTO> getActivePasses(Integer id){
-        return passRepository.getActivePassesByClient_id(id,LocalDate.now())
+        return passRepository.getActivePassesByClient_id(id)
                 .stream()
                 .map(PassResponseDTO::of)
                 .toList();
