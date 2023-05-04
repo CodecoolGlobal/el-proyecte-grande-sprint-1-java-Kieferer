@@ -49,4 +49,12 @@ public class ScheduleService {
         List<Schedule> schedules = scheduleRepository.findByRouteName(name);
         return schedules.stream().map(Schedule::getStop).toList();
     }
+
+    public void deleteScheduleById(int id) {
+        scheduleRepository.deleteById(id);
+    }
+
+    public void deleteSchedulesByRouteName(String routeName) {
+        scheduleRepository.deleteAll(scheduleRepository.findByRouteName(routeName));
+    }
 }
