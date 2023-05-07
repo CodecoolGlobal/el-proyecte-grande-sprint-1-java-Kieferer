@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/client")
@@ -54,8 +53,11 @@ public class ClientController {
 
         Cookie privilageCookie = new Cookie("privilege", client.getType().toString());
         Cookie emailCookie = new Cookie("email", client.getEmail());
+        Cookie idCookie = new Cookie("id", client.getId().toString());
+        setupCookie(idCookie);
         setupCookie(privilageCookie);
         setupCookie(emailCookie);
+        response.addCookie(idCookie);
         response.addCookie(privilageCookie);
         response.addCookie(emailCookie);
 
