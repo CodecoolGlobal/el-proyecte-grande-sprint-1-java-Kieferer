@@ -1,20 +1,15 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
-import com.codecool.budapestgo.dao.model.stop.Point;
-import com.codecool.budapestgo.dao.model.stop.Stop;
-import com.codecool.budapestgo.dao.model.stop.StopRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.codecool.budapestgo.dao.model.stop.*;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -77,12 +72,11 @@ class StopServiceTest {
         List<StopDTO> stopDTOs = stopService.getAllStops();
 
         assertEquals(stopDTOs.size(), stops.size());
-        assertEquals(stops.get(0).getName(), stopDTOs.get(0).name());
-        assertEquals(stops.get(0).getLocation().getLatitude(), stopDTOs.get(0).latitude());
-        assertEquals(stops.get(0).getLocation().getLongitude(), stopDTOs.get(0).longitude());
-        assertEquals(stops.get(1).getName(), stopDTOs.get(1).name());
-        assertEquals(stops.get(1).getLocation().getLatitude(), stopDTOs.get(1).latitude());
-        assertEquals(stops.get(1).getLocation().getLongitude(), stopDTOs.get(1).longitude());
+
+        for (int i = 0; i < stops.size(); i++) {
+            assertStopEquals(stops.get(i),stopDTOs.get(i));
+        }
+
     }
 
     @Test
@@ -186,5 +180,19 @@ class StopServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Stop not found", response.getBody());
         verify(stopRepository, never()).save(any(Stop.class));
+    }
+
+    private Stop buildStop(Integer id,String name,Point location){
+        return Stop.builder()
+                .id(id)
+                .name(name)
+                .location(location)
+                .build();
+    }
+
+    private void assertStopEquals(Stop stop, StopDTO stopDTO){
+        assertEquals(stop.getName(),stopDTO.name());
+        assertEquals(stop.getLocation().getLatitude(),stopDTO.latitude());
+        assertEquals(stop.getLocation().getLongitude(),stopDTO.longitude());
     }
 }
