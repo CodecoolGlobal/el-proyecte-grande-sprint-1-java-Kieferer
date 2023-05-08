@@ -29,22 +29,6 @@ class StopServiceTest {
     }
 
     @Test
-    void testExistsById() {
-        int id = 1;
-        when(stopRepository.findById(id)).thenReturn(Optional.of(new Stop()));
-
-        assertTrue(stopService.existsById(id));
-    }
-
-    @Test
-    void testExistsByIdWhenNotExists() {
-        int id = 1;
-        when(stopRepository.findById(id)).thenReturn(Optional.empty());
-
-        assertFalse(stopService.existsById(id));
-    }
-
-    @Test
     void testExistsByName() {
         String name = "Stop";
         when(stopRepository.getStopByName(name)).thenReturn(Optional.of(new Stop()));
@@ -63,8 +47,8 @@ class StopServiceTest {
     @Test
     void testGetAllStops() {
         List<Stop> stops = new ArrayList<>();
-        Stop stopOne = new Stop(1, "Stop 1", new Point(1.0, 2.0));
-        Stop stopTwo = new Stop(2, "Stop 2", new Point(3.0, 4.0));
+        Stop stopOne = buildStop(1,"Stop 1",new Point(1.0,2.0));
+        Stop stopTwo = buildStop(2,"Stop 2",new Point(3.0,4.0));
         stops.add(stopOne);
         stops.add(stopTwo);
         when(stopRepository.findAll()).thenReturn(stops);
@@ -76,7 +60,6 @@ class StopServiceTest {
         for (int i = 0; i < stops.size(); i++) {
             assertStopEquals(stops.get(i),stopDTOs.get(i));
         }
-
     }
 
     @Test
