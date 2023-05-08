@@ -32,7 +32,7 @@ public class StopController {
     public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
         return stopService.updateStop(stopDTO);
     }
-    @DeleteMapping("/")
+    @DeleteMapping("/all")
     public ResponseEntity<String> deleteAllStop(){
         return stopService.deleteAllStops();
     }
