@@ -11,22 +11,19 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
-public class Pass {
+public class PurchasedPass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private final Integer id;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private final Client client;
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    private final PassType passType;
-    @NonNull
-    private final LocalDate startTime;
-    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "pass_id", referencedColumnName = "id")
+    private final PassCategory passCategory;
     private final LocalDate expireTime;
-    public static LocalDate calculateExpireTime(LocalDate startTime, PassType passType){
-        return startTime.plusDays(passType.getExpireInDay());
-    }
 
+    public static LocalDate calculateExpireTime(long numberOfDays){
+        return LocalDate.now().plusDays(numberOfDays);
+    }
 }
