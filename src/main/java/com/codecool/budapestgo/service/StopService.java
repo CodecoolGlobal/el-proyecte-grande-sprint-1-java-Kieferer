@@ -69,4 +69,9 @@ public class StopService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Stop not found");
     }
+
+    public ResponseEntity<String> deleteAllStops() {
+            stopRepository.deleteAll();
+            return ResponseEntity.ok("Stops deleted");
+    }
 }
