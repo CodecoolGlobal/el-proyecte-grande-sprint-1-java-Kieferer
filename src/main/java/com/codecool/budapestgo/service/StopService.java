@@ -19,9 +19,6 @@ public class StopService {
     public StopService(StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
-    public boolean existsById(Integer id) {
-        return stopRepository.findById(id).isPresent();
-    }
     public boolean existsByName(String name) {
         return stopRepository.getStopByName(name).isPresent();
     }
@@ -41,7 +38,7 @@ public class StopService {
     }
 
     public ResponseEntity<String> deleteStopById(Integer id) {
-        if(existsById(id)) {
+        if(stopRepository.existsById(id)) {
             stopRepository.deleteById(id);
             return ResponseEntity.ok("Stop deleted.");
         }
@@ -71,5 +68,10 @@ public class StopService {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Stop not found");
+    }
+
+    public ResponseEntity<String> deleteAllStops() {
+            stopRepository.deleteAll();
+            return ResponseEntity.ok("Stops deleted");
     }
 }
