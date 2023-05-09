@@ -1,11 +1,14 @@
 package com.codecool.budapestgo.controller;
 
-import com.codecool.budapestgo.controller.dto.pass.PassCategoryDTO;
+import com.codecool.budapestgo.controller.dto.pass.PassCategoryRegisterDTO;
+import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
+import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.service.PassCategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -14,13 +17,21 @@ import java.util.List;
 public class PassCategoryController {
     private final PassCategoryService passCategoryService;
     @GetMapping("/all")
-    public List<PassCategoryDTO> getAllCategory(){
+    public List<PassCategoryResponseDTO> getAllCategory(){
         return passCategoryService.getAllPassCategory();
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerPass(@RequestBody PassCategoryDTO passCategoryDTO){
-       return passCategoryService.addPassCategory(passCategoryDTO);
+    public ResponseEntity<String> registerPass(@RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
+       try {
+           if (DTOValidator.registrationIsInvalid(passCategoryRegisterDTO)) {
+               return ResponseEntity.badRequest().body("Fields cannot be empty");
+           } else {
+               return passCategoryService.addPassCategory(passCategoryRegisterDTO);
+           }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -28,7 +39,7 @@ public class PassCategoryController {
        return passCategoryService.deletePassCategoryById(id);
     }
     @PutMapping
-    public ResponseEntity<String> updatePassCategory(@RequestBody PassCategoryDTO passCategoryDTO){
-        return passCategoryService.updatePassCategory(passCategoryDTO);
+    public ResponseEntity<String> updatePassCategory(@RequestBody PassCategoryResponseDTO passCategoryResponseDTO){
+        return passCategoryService.updatePassCategory(passCategoryResponseDTO);
     }
 }

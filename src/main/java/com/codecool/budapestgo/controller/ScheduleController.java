@@ -1,11 +1,14 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
+import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.service.ScheduleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -17,8 +20,16 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
     @PostMapping("/add")
-    public void addSchedule(@RequestBody ScheduleDTO scheduleDTO){
-        scheduleService.addSchedule(scheduleDTO);
+    public ResponseEntity<String> addSchedule(@RequestBody ScheduleDTO scheduleDTO){
+        try {
+            if (DTOValidator.registrationIsInvalid(scheduleDTO)) {
+                return ResponseEntity.badRequest().body("Fields cannot be empty");
+            } else {
+                return scheduleService.addSchedule(scheduleDTO);
+            }
+        }catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+        }
     }
     @GetMapping("/{name}")
     public List<Schedule> getScheduleByRouteId(@PathVariable String name){

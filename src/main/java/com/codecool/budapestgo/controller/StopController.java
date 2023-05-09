@@ -1,10 +1,12 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
+import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.service.StopService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,15 @@ public class StopController {
     }
     @PostMapping("/add")
     public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO) {
-      return stopService.addStop(stopDTO);
+        try {
+            if (DTOValidator.registrationIsInvalid(stopDTO)) {
+                return ResponseEntity.badRequest().body("Fields cannot be empty");
+            } else {
+                return stopService.addStop(stopDTO);
+            }
+        }catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
     @PutMapping("/")
     public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){

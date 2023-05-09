@@ -13,6 +13,11 @@ import java.time.LocalDate;
 public class PurchasedPass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "purchased_pass_seq",
+            sequenceName = "purchased_pass_seq",
+            allocationSize = 1
+    )
     private final Long id;
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")

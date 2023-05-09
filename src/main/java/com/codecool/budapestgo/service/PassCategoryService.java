@@ -1,6 +1,7 @@
 package com.codecool.budapestgo.service;
 
-import com.codecool.budapestgo.controller.dto.pass.PassCategoryDTO;
+import com.codecool.budapestgo.controller.dto.pass.PassCategoryRegisterDTO;
+import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
 import com.codecool.budapestgo.dao.model.PassCategory;
 import com.codecool.budapestgo.dao.repository.PassCategoryRepository;
 import lombok.AllArgsConstructor;
@@ -18,21 +19,21 @@ import java.util.Optional;
 public class PassCategoryService {
     private final PassCategoryRepository passCategoryRepository;
 
-    public List<PassCategoryDTO> getAllPassCategory(){
+    public List<PassCategoryResponseDTO> getAllPassCategory(){
         return passCategoryRepository.findAll()
                 .stream()
-                .map(PassCategoryDTO::of)
+                .map(PassCategoryResponseDTO::of)
                 .toList();
     }
-    public ResponseEntity<String> addPassCategory(PassCategoryDTO passCategoryDTO){
+    public ResponseEntity<String> addPassCategory(PassCategoryRegisterDTO passCategoryRegisterDTO){
       try {
-          Optional<PassCategory> optionalPassCategory = passCategoryRepository.findByCategoryAndPassDuration(passCategoryDTO.getCategory(), passCategoryDTO.getPassDuration());
+          Optional<PassCategory> optionalPassCategory = passCategoryRepository.findByCategoryAndPassDuration(passCategoryRegisterDTO.category(), passCategoryRegisterDTO.passDuration());
           if (optionalPassCategory.isEmpty()) {
               PassCategory passCategory = PassCategory.builder()
-                      .category(passCategoryDTO.getCategory())
-                      .passDuration(passCategoryDTO.getPassDuration())
-                      .passExpireInDay(passCategoryDTO.getPassExpireInDay())
-                      .price(passCategoryDTO.getPrice())
+                      .category(passCategoryRegisterDTO.category())
+                      .passDuration(passCategoryRegisterDTO.passDuration())
+                      .passExpireInDay(passCategoryRegisterDTO.passExpireInDay())
+                      .price(passCategoryRegisterDTO.price())
                       .build();
 
               passCategoryRepository.save(passCategory);
@@ -40,7 +41,7 @@ public class PassCategoryService {
           }
           return ResponseEntity.badRequest().body("Pass category already exist.");
       }catch (DataIntegrityViolationException e) {
-          return ResponseEntity.badRequest().body("Pass category already exist.");
+          return ResponseEntity.badRequest().body(e.getMessage());
       }
     }
     public ResponseEntity<String> deletePassCategoryById(Long id){
@@ -54,22 +55,22 @@ public class PassCategoryService {
             return ResponseEntity.notFound().build();
         }
     }
-    public ResponseEntity<String> updatePassCategory(PassCategoryDTO passCategoryDTO){
+    public ResponseEntity<String> updatePassCategory(PassCategoryResponseDTO passCategoryResponseDTO){
         try {
-            Optional<PassCategory> optionalPassCategory = passCategoryRepository.findById(passCategoryDTO.getId());
+            Optional<PassCategory> optionalPassCategory = passCategoryRepository.findById(passCategoryResponseDTO.id());
             if (optionalPassCategory.isPresent()) {
                 PassCategory updatedPass = PassCategory.builder()
-                        .passDuration(passCategoryDTO.getPassDuration())
-                        .passExpireInDay(passCategoryDTO.getPassExpireInDay())
-                        .category(passCategoryDTO.getCategory())
-                        .price(passCategoryDTO.getPrice())
+                        .passDuration(passCategoryResponseDTO.passDuration())
+                        .passExpireInDay(passCategoryResponseDTO.passExpireInDay())
+                        .category(passCategoryResponseDTO.category())
+                        .price(passCategoryResponseDTO.price())
                         .build();
                 passCategoryRepository.saveAndFlush(updatedPass);
                 return ResponseEntity.ok("Pass category updated");
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pass category not found");
         }catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pass category not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

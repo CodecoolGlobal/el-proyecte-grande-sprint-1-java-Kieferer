@@ -13,6 +13,11 @@ import lombok.NoArgsConstructor;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "schedule_seq",
+            sequenceName = "schedule_seq",
+            allocationSize = 1
+    )
     private final Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)

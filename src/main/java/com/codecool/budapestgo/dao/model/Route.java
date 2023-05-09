@@ -10,6 +10,11 @@ import lombok.*;
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "route_seq",
+            sequenceName = "route_seq",
+            allocationSize = 1
+    )
     private final Long id;
     @NonNull
     private String name;

@@ -29,11 +29,16 @@ public class RouteService {
         routeRepository.deleteById(id);
     }
 
-    public void addRoute(NewRouteDTO newRouteDTO) {
-        Route route = Route.builder()
-                .name(newRouteDTO.name())
-                .build();
-        routeRepository.save(route);
+    public ResponseEntity<String> addRoute(NewRouteDTO newRouteDTO) {
+        Optional<Route> optionalRoute = routeRepository.getRouteByName(newRouteDTO.name());
+        if(optionalRoute.isPresent()) {
+            Route route = Route.builder()
+                    .name(newRouteDTO.name())
+                    .build();
+            routeRepository.save(route);
+            return ResponseEntity.ok("Route created");
+        }
+            return ResponseEntity.badRequest().body("Route already exist.");
     }
 
     public ResponseEntity<String> updateRoute(UpdateRouteDTO newRouteDTO) {
@@ -43,7 +48,6 @@ public class RouteService {
             routeRepository.save(route.get());
             return ResponseEntity.ok("Route updated");
         }
-        else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Route not found");
     }
 }
