@@ -12,7 +12,7 @@ import lombok.*;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final Integer id;
+    private final Long id;
     @Enumerated(EnumType.STRING)
     @NonNull private final ClientCategoryType type;
     @NonNull private String email;
