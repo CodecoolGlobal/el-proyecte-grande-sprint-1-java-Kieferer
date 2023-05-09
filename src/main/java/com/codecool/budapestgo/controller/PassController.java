@@ -21,11 +21,11 @@ public class PassController {
         return passService.getAllPass();
     }
     @GetMapping("/active/{id}")
-    public List<PassResponseDTO> getActivePasses(@PathVariable Integer id){
+    public List<PassResponseDTO> getActivePasses(@PathVariable Long id){
         return passService.getActivePasses(id);
     }
     @GetMapping("/expired/{id}")
-    public List<PassResponseDTO> getExpiredPasses(@PathVariable Integer id){
+    public List<PassResponseDTO> getExpiredPasses(@PathVariable Long id){
         return passService.getExpiredPasses(id);
     }
 
