@@ -11,9 +11,7 @@ import lombok.*;
 @Entity
 public class Client {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private final Integer id;
     @Enumerated(EnumType.STRING)
     @NonNull private final ClientCategoryType type;
