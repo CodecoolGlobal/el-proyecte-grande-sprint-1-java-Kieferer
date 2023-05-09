@@ -50,7 +50,15 @@ public class ClientController {
 
     @PutMapping()
     public ResponseEntity<String> updateClient(@RequestBody ClientUpdateDTO clientUpdateDTO) {
-        return clientService.updateClient(clientUpdateDTO);
+        try {
+            if (DTOValidator.registrationIsInvalid(clientUpdateDTO)) {
+                return ResponseEntity.badRequest().body("Email or password cannot be empty");
+            } else {
+                return clientService.updateClient(clientUpdateDTO);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
