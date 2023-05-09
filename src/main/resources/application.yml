@@ -12,3 +12,7 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jwt:
+    secretKey: ${key}
+    tokenPrefix: Bearer
+    tokenExpirationAfterDays: 6
