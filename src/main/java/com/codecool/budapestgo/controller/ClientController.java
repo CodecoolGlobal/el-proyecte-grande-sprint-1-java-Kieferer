@@ -3,6 +3,7 @@ package com.codecool.budapestgo.controller;
 import com.codecool.budapestgo.controller.dto.client.ClientDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
+import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.dao.model.client.Client;
 import com.codecool.budapestgo.service.ClientService;
 import jakarta.servlet.http.Cookie;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,8 +36,16 @@ public class ClientController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerClient(@RequestBody ClientRegisterDTO clientRegisterDTO) {
-        return clientService.addClient(clientRegisterDTO);
+    public ResponseEntity<String> registerClient(@RequestBody ClientRegisterDTO clientRegisterDTO){
+        try {
+            if(DTOValidator.registrationIsInvalid(clientRegisterDTO)){
+                return ResponseEntity.badRequest().body("Email or password cannot be empty");
+            }else{
+                return clientService.addClient(clientRegisterDTO);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PutMapping()

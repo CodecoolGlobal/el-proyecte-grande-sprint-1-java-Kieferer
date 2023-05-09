@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PassCategoryController {
     private final PassCategoryService passCategoryService;
-    @GetMapping
+    @GetMapping("/all")
     public List<PassCategoryDTO> getAllCategory(){
         return passCategoryService.getAllPassCategory();
     }
