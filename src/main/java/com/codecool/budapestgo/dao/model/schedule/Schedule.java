@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final int id;
+    private final long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "route_name", referencedColumnName = "name")
@@ -24,6 +24,4 @@ public class Schedule {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "stop_name", referencedColumnName = "name")
     private Stop stop;
-
-    //duration, launch_date
 }
