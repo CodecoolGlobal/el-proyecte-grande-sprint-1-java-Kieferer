@@ -27,12 +27,12 @@ public class ClientService {
                 .map(ClientDTO::of)
                 .toList();
     }
-    public ResponseEntity<ClientDTO> getClientById(Integer id){
+    public ResponseEntity<ClientDTO> getClientById(Long id){
         return clientRepository.findById(id)
                 .map(client ->  ResponseEntity.ok(ClientDTO.of(client)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    public void deleteClientById(Integer id){
+    public void deleteClientById(Long id){
         clientRepository.deleteById(id);
     }
     public ResponseEntity<String> addClient(ClientRegisterDTO clientToRegister){

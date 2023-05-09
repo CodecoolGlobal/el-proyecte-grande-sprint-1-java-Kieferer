@@ -33,7 +33,7 @@ public class ScheduleController {
         return scheduleService.getAllSchedule();
     }
     @DeleteMapping("/{id}")
-    public void deleteScheduleById(@PathVariable int id){
+    public void deleteScheduleById(@PathVariable Long id){
         scheduleService.deleteScheduleById(id);
     }
     @DeleteMapping("/{routeName}")

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Pass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final Integer id;
+    private final Long id;
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private final Client client;

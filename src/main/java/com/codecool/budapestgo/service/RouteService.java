@@ -21,11 +21,11 @@ public class RouteService {
     }
 
     public List<RouteDTO> getAllRoutes() {
-        return routeRepository.findAll().stream().map(RouteDTO::new).toList();
+        return routeRepository.findAll().stream().map(RouteDTO::of).toList();
     }
 
 
-    public void deleteRoute(int id) {
+    public void deleteRoute(Long id) {
         routeRepository.deleteById(id);
     }
 

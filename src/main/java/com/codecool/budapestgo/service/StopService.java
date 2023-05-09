@@ -29,7 +29,7 @@ public class StopService {
                 .toList();
     }
 
-    public ResponseEntity<StopDTO> getStopById(Integer id) {
+    public ResponseEntity<StopDTO> getStopById(Long id) {
         return stopRepository.findById(id)
                 .stream()
                 .map(stop ->  ResponseEntity.ok(new StopDTO(stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude())))
@@ -37,7 +37,7 @@ public class StopService {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<String> deleteStopById(Integer id) {
+    public ResponseEntity<String> deleteStopById(Long id) {
         if(stopRepository.existsById(id)) {
             stopRepository.deleteById(id);
             return ResponseEntity.ok("Stop deleted.");

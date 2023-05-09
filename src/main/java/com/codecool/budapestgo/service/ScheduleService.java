@@ -28,8 +28,12 @@ public class ScheduleService {
         Optional<Route> route = routeRepository.getRouteByName(scheduleDTO.routeName());
         Optional<Stop> stop = stopRepository.getStopByName(scheduleDTO.stopName());
 
-        if (route.isEmpty() || stop.isEmpty())
-            throw new RuntimeException("There is no matching route or stop");
+        if (route.isEmpty() && stop.isEmpty())
+            throw new RuntimeException("There is no matching route and stop");
+        else if (stop.isEmpty())
+            throw new RuntimeException("There is no marching stop");
+        else if (route.isEmpty())
+            throw new RuntimeException("There is no marching route");
 
         Schedule routeSchedule = Schedule.builder()
                 .route(route.get())
@@ -50,7 +54,7 @@ public class ScheduleService {
         return schedules.stream().map(Schedule::getStop).toList();
     }
 
-    public void deleteScheduleById(int id) {
+    public void deleteScheduleById(Long id) {
         scheduleRepository.deleteById(id);
     }
 
