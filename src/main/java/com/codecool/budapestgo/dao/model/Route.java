@@ -10,7 +10,7 @@ import lombok.*;
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final Integer id;
+    private final Long id;
     @NonNull
     private String name;
     public void setName(@NonNull String name){
