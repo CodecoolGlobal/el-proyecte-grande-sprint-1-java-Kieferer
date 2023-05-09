@@ -57,8 +57,4 @@ public class ScheduleService {
     public void deleteScheduleById(Long id) {
         scheduleRepository.deleteById(id);
     }
-
-    public void deleteSchedulesByRouteName(String routeName) {
-        scheduleRepository.deleteAll(scheduleRepository.findByRouteName(routeName));
-    }
 }
