@@ -12,10 +12,8 @@ import lombok.*;
 @Entity
 public class Stop {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
-    )
-    private final Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private final Long id;
     @NonNull
     private String name;
     @Embedded
