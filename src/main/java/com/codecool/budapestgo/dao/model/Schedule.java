@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final long id;
+    private final Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "route_name", referencedColumnName = "name")
