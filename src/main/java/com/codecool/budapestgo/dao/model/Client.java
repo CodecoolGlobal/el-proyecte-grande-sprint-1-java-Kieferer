@@ -1,6 +1,6 @@
-package com.codecool.budapestgo.dao.model.client;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.data.ClientCategoryType;
+import com.codecool.budapestgo.dao.types.ClientCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,10 +11,8 @@ import lombok.*;
 @Entity
 public class Client {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
-    )
-    private final Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private final Long id;
     @Enumerated(EnumType.STRING)
     @NonNull private final ClientCategoryType type;
     @NonNull private String email;

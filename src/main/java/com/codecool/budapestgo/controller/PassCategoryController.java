@@ -24,7 +24,7 @@ public class PassCategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePassCategoryById(@PathVariable int id){
+    public ResponseEntity<String> deletePassCategoryById(@PathVariable Long id){
        return passCategoryService.deletePassCategoryById(id);
     }
     @PutMapping

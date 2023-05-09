@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.model.stop;
+package com.codecool.budapestgo.data;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

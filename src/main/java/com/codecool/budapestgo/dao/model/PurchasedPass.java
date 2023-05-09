@@ -1,6 +1,5 @@
-package com.codecool.budapestgo.dao.model.pass;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.dao.model.client.Client;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 public class PurchasedPass {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final Integer id;
+    private final Long id;
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private final Client client;

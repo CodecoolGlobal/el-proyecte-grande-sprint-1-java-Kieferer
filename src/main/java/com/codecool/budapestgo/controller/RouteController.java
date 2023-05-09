@@ -24,7 +24,7 @@ public class RouteController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRoute(@PathVariable int id){
+    public void deleteRoute(@PathVariable Long id){
         routeService.deleteRoute(id);
     }
 

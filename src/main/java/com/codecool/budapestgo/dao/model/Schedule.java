@@ -1,7 +1,5 @@
-package com.codecool.budapestgo.dao.model.schedule;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.dao.model.route.Route;
-import com.codecool.budapestgo.dao.model.stop.Stop;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private final int id;
+    private final Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "route_name", referencedColumnName = "name")
@@ -24,6 +22,4 @@ public class Schedule {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "stop_name", referencedColumnName = "name")
     private Stop stop;
-
-    //duration, launch_date
 }

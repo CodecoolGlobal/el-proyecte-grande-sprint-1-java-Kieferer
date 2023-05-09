@@ -2,9 +2,9 @@ package com.codecool.budapestgo.service;
 
 
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
-import com.codecool.budapestgo.dao.model.stop.Point;
-import com.codecool.budapestgo.dao.model.stop.Stop;
-import com.codecool.budapestgo.dao.model.stop.StopRepository;
+import com.codecool.budapestgo.data.Point;
+import com.codecool.budapestgo.dao.model.Stop;
+import com.codecool.budapestgo.dao.repository.StopRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,6 @@ public class StopService {
     public StopService(StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
-    public boolean existsById(Integer id) {
-        return stopRepository.findById(id).isPresent();
-    }
     public boolean existsByName(String name) {
         return stopRepository.getStopByName(name).isPresent();
     }
@@ -32,7 +29,7 @@ public class StopService {
                 .toList();
     }
 
-    public ResponseEntity<StopDTO> getStopById(Integer id) {
+    public ResponseEntity<StopDTO> getStopById(Long id) {
         return stopRepository.findById(id)
                 .stream()
                 .map(stop ->  ResponseEntity.ok(new StopDTO(stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude())))
@@ -40,8 +37,8 @@ public class StopService {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<String> deleteStopById(Integer id) {
-        if(existsById(id)) {
+    public ResponseEntity<String> deleteStopById(Long id) {
+        if(stopRepository.existsById(id)) {
             stopRepository.deleteById(id);
             return ResponseEntity.ok("Stop deleted.");
         }
@@ -71,5 +68,10 @@ public class StopService {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Stop not found");
+    }
+
+    public ResponseEntity<String> deleteAllStops() {
+            stopRepository.deleteAll();
+            return ResponseEntity.ok("Stops deleted");
     }
 }

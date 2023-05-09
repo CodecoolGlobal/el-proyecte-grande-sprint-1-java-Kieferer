@@ -21,11 +21,11 @@ public class PurchasedPassController {
     }
 
     @GetMapping("/active/{id}")
-    public List<PurchasedPassResponseDTO> getActivePasses(@PathVariable Integer id){
+    public List<PurchasedPassResponseDTO> getActivePasses(@PathVariable Long id){
         return purchasedPassService.getActivePasses(id);
     }
     @GetMapping("/expired/{id}")
-    public List<PurchasedPassResponseDTO> getExpiredPasses(@PathVariable Integer id){
+    public List<PurchasedPassResponseDTO> getExpiredPasses(@PathVariable Long id){
         return purchasedPassService.getExpiredPasses(id);
     }
 
@@ -35,7 +35,7 @@ public class PurchasedPassController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAllPassOfClient(@PathVariable int id){
+    public ResponseEntity<String> deleteAllPassOfClient(@PathVariable Long id){
        return purchasedPassService.deletePassesByClientId(id);
     }
 }

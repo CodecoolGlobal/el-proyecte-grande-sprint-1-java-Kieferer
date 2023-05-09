@@ -1,8 +1,8 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryDTO;
-import com.codecool.budapestgo.dao.model.pass.PassCategory;
-import com.codecool.budapestgo.dao.model.pass.PassCategoryRepository;
+import com.codecool.budapestgo.dao.model.PassCategory;
+import com.codecool.budapestgo.dao.repository.PassCategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -43,7 +43,7 @@ public class PassCategoryService {
           return ResponseEntity.badRequest().body("Pass category already exist.");
       }
     }
-    public ResponseEntity<String> deletePassCategoryById(int id){
+    public ResponseEntity<String> deletePassCategoryById(Long id){
         if (id == 0) {
             return ResponseEntity.badRequest().body("ID cannot be 0.");
         }

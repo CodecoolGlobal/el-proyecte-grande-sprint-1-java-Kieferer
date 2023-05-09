@@ -3,8 +3,8 @@ package com.codecool.budapestgo.service;
 import com.codecool.budapestgo.controller.dto.route.NewRouteDTO;
 import com.codecool.budapestgo.controller.dto.route.RouteDTO;
 import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
-import com.codecool.budapestgo.dao.model.route.Route;
-import com.codecool.budapestgo.dao.model.route.RouteRepository;
+import com.codecool.budapestgo.dao.model.Route;
+import com.codecool.budapestgo.dao.repository.RouteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -35,8 +35,8 @@ class RouteServiceTest {
     @Test
     void testGetAllRoute() {
         List<Route> routes = new ArrayList<>();
-        Route routeOne = new Route(1,"9");
-        Route routeTwo = new Route(2,"M3");
+        Route routeOne = new Route(1L,"9");
+        Route routeTwo = new Route(2L,"M3");
         routes.add(routeOne);
         routes.add(routeTwo);
         when(routeRepository.findAll()).thenReturn(routes);
@@ -44,16 +44,16 @@ class RouteServiceTest {
         List<RouteDTO> routeDTOS = routeService.getAllRoutes();
 
         assertEquals(routeDTOS.size(),routes.size());
-        assertEquals(routes.get(0).getId(),routeDTOS.get(0).getId());
-        assertEquals(routes.get(0).getName(),routeDTOS.get(0).getName());
-        assertEquals(routes.get(1).getId(),routeDTOS.get(1).getId());
-        assertEquals(routes.get(1).getName(),routeDTOS.get(1).getName());
+        assertEquals(routes.get(0).getId(),routeDTOS.get(0).id());
+        assertEquals(routes.get(0).getName(),routeDTOS.get(0).name());
+        assertEquals(routes.get(1).getId(),routeDTOS.get(1).id());
+        assertEquals(routes.get(1).getName(),routeDTOS.get(1).name());
     }
 
     @Test
     void testDeleteRoute() {
-        int id = 1;
-        routeService.deleteRoute(1);
+        Long id = 1L;
+        routeService.deleteRoute(id);
 
         verify(routeRepository ,times(1)).deleteById(id);
     }
@@ -68,7 +68,7 @@ class RouteServiceTest {
 
     @Test
     void testUpdateRouteWhenRouteExist() {
-        int id = 1;
+        Long id = 1L;
         String newName= "Updated Route";
         UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,newName);
         Route route = new Route(id,"Old Route");
@@ -84,8 +84,9 @@ class RouteServiceTest {
 
     @Test
     void testUpdateRouteWhenRouteNotExist() {
-        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(1,"9");
-        when(routeRepository.findById(1)).thenReturn(Optional.empty());
+        Long id = 1L;
+        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,"9");
+        when(routeRepository.findById(id)).thenReturn(Optional.empty());
 
         ResponseEntity<String> response = routeService.updateRoute(updateRouteDTO);
 

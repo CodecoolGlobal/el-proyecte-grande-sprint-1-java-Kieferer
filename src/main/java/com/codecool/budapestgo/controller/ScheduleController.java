@@ -1,8 +1,8 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
-import com.codecool.budapestgo.dao.model.schedule.Schedule;
-import com.codecool.budapestgo.dao.model.stop.Stop;
+import com.codecool.budapestgo.dao.model.Schedule;
+import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +33,7 @@ public class ScheduleController {
         return scheduleService.getAllSchedule();
     }
     @DeleteMapping("/{id}")
-    public void deleteScheduleById(@PathVariable int id){
+    public void deleteScheduleById(@PathVariable Long id){
         scheduleService.deleteScheduleById(id);
-    }
-    @DeleteMapping("/{routeName}")
-    public void deleteSchedulesByRouteName(@PathVariable String routeName){
-        scheduleService.deleteSchedulesByRouteName(routeName);
     }
 }

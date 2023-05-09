@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.data;
+package com.codecool.budapestgo.dao.types;
 
 public enum ClientCategoryType {
     CUSTOMER,

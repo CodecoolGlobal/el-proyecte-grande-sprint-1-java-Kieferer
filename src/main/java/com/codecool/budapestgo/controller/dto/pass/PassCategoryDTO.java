@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.controller.dto.pass;
 
-import com.codecool.budapestgo.dao.model.pass.PassCategory;
+import com.codecool.budapestgo.dao.model.PassCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class PassCategoryDTO {
     private final String passDuration;
     private final long passExpireInDay;
     private final int price;
-    private final int id;
+    private final Long id;
 
     public static PassCategoryDTO of (PassCategory passCategory){
         return PassCategoryDTO.builder()

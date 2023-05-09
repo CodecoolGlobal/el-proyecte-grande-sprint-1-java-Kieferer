@@ -3,9 +3,9 @@ package com.codecool.budapestgo.service;
 import com.codecool.budapestgo.controller.dto.client.ClientDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
-import com.codecool.budapestgo.dao.model.client.Client;
-import com.codecool.budapestgo.dao.model.client.ClientRepository;
-import com.codecool.budapestgo.data.ClientCategoryType;
+import com.codecool.budapestgo.dao.model.Client;
+import com.codecool.budapestgo.dao.repository.ClientRepository;
+import com.codecool.budapestgo.dao.types.ClientCategoryType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,12 +27,12 @@ public class ClientService {
                 .map(ClientDTO::of)
                 .toList();
     }
-    public ResponseEntity<ClientDTO> getClientById(Integer id){
+    public ResponseEntity<ClientDTO> getClientById(Long id){
         return clientRepository.findById(id)
                 .map(client ->  ResponseEntity.ok(ClientDTO.of(client)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    public void deleteClientById(Integer id){
+    public void deleteClientById(Long id){
         clientRepository.deleteById(id);
     }
     public ResponseEntity<String> addClient(ClientRegisterDTO clientToRegister){

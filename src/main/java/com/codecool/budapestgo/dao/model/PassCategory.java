@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.model.pass;
+package com.codecool.budapestgo.dao.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +17,7 @@ public class PassCategory {
             sequenceName = "pass_seq",
             allocationSize = 1
     )
-    private Integer id;
+    private Long id;
     private final String passDuration;
     private final long passExpireInDay;
     private final String category;
