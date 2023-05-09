@@ -24,7 +24,7 @@ public class PassService {
         this.clientRepository = clientRepository;
     }
     public List<PassResponseDTO> getAllPass(){
-        return passRepository.findAll().stream().map(PassResponseDTO::of) .toList();
+        return passRepository.findAll().stream().map(PassResponseDTO::of).toList();
     }
 
     public ResponseEntity<String> addPass(PassDTO passDTO){
@@ -45,13 +45,13 @@ public class PassService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Client not found.");
     }
-    public List<PassResponseDTO> getExpiredPasses(Integer id){
+    public List<PassResponseDTO> getExpiredPasses(Long id){
         return passRepository.getAllExpiredPassesByClient_id(id)
                 .stream()
                 .map(PassResponseDTO::of)
                 .toList();
     }
-    public List<PassResponseDTO> getActivePasses(Integer id){
+    public List<PassResponseDTO> getActivePasses(Long id){
         return passRepository.getActivePassesByClient_id(id)
                 .stream()
                 .map(PassResponseDTO::of)
