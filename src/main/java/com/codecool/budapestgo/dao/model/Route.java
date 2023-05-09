@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.model.route;
+package com.codecool.budapestgo.dao.model;
 
 import jakarta.persistence.*;
 import lombok.*;

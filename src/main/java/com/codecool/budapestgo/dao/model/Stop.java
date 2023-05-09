@@ -1,5 +1,6 @@
-package com.codecool.budapestgo.dao.model.stop;
+package com.codecool.budapestgo.dao.model;
 
+import com.codecool.budapestgo.data.Point;
 import jakarta.persistence.*;
 import lombok.*;
 

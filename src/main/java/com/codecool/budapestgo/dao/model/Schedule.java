@@ -1,7 +1,5 @@
-package com.codecool.budapestgo.dao.model.schedule;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.dao.model.route.Route;
-import com.codecool.budapestgo.dao.model.stop.Stop;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

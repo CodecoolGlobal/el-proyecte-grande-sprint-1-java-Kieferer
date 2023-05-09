@@ -1,6 +1,6 @@
-package com.codecool.budapestgo.dao.model.client;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.data.ClientCategoryType;
+import com.codecool.budapestgo.dao.types.ClientCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 

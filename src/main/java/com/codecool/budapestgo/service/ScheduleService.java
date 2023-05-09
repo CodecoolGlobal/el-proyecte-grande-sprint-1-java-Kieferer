@@ -1,12 +1,12 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
-import com.codecool.budapestgo.dao.model.route.Route;
-import com.codecool.budapestgo.dao.model.route.RouteRepository;
-import com.codecool.budapestgo.dao.model.schedule.Schedule;
-import com.codecool.budapestgo.dao.model.schedule.ScheduleRepository;
-import com.codecool.budapestgo.dao.model.stop.Stop;
-import com.codecool.budapestgo.dao.model.stop.StopRepository;
+import com.codecool.budapestgo.dao.model.Route;
+import com.codecool.budapestgo.dao.repository.RouteRepository;
+import com.codecool.budapestgo.dao.model.Schedule;
+import com.codecool.budapestgo.dao.repository.ScheduleRepository;
+import com.codecool.budapestgo.dao.model.Stop;
+import com.codecool.budapestgo.dao.repository.StopRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.controller.dto.route;
 
-import com.codecool.budapestgo.dao.model.route.Route;
+import com.codecool.budapestgo.dao.model.Route;
 
 import java.util.Objects;
 

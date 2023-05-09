@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.controller.dto.pass;
 
-import com.codecool.budapestgo.dao.model.pass.Pass;
+import com.codecool.budapestgo.dao.model.Pass;
 import lombok.Getter;
 
 import java.time.LocalDate;

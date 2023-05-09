@@ -1,6 +1,6 @@
-package com.codecool.budapestgo.dao.model.pass;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.dao.model.client.Client;
+import com.codecool.budapestgo.dao.types.PassType;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -2,9 +2,9 @@ package com.codecool.budapestgo.service;
 
 
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
-import com.codecool.budapestgo.dao.model.stop.Point;
-import com.codecool.budapestgo.dao.model.stop.Stop;
-import com.codecool.budapestgo.dao.model.stop.StopRepository;
+import com.codecool.budapestgo.data.Point;
+import com.codecool.budapestgo.dao.model.Stop;
+import com.codecool.budapestgo.dao.repository.StopRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

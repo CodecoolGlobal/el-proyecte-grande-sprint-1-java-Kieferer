@@ -1,4 +1,4 @@
-package com.codecool.budapestgo.dao.model.pass;
+package com.codecool.budapestgo.dao.types;
 
 import lombok.Getter;
 
