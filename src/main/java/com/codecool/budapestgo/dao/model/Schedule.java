@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Getter
+@Setter
 @Entity
 public class Schedule {
     @Id
@@ -20,11 +21,11 @@ public class Schedule {
     )
     private final Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route_name", referencedColumnName = "name")
     private Route route;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stop_name", referencedColumnName = "name")
     private Stop stop;
 }

@@ -1,5 +1,4 @@
 package com.codecool.budapestgo.service;
-
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
@@ -40,6 +39,9 @@ public class ScheduleService {
                 .stop(stop.get())
                 .build();
         scheduleRepository.save(routeSchedule);
+
+        stop.get().addSchedule(routeSchedule);
+        route.get().addSchedule(routeSchedule);
     }
     public List<Schedule> getRouteSchedule(String name){
         return scheduleRepository.findByRouteName(name);
@@ -55,6 +57,10 @@ public class ScheduleService {
     }
 
     public void deleteScheduleById(Long id) {
+        scheduleRepository.findById(id).ifPresent(schedule -> {
+            schedule.getRoute().removeSchedule(schedule);
+            schedule.getStop().removeSchedule(schedule);
+        });
         scheduleRepository.deleteById(id);
     }
 }

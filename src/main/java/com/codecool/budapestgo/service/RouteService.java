@@ -42,12 +42,16 @@ public class RouteService {
     }
 
     public ResponseEntity<String> updateRoute(UpdateRouteDTO newRouteDTO) {
-        Optional<Route> route = routeRepository.findById(newRouteDTO.id());
-        if (route.isPresent()){
-            route.get().setName(newRouteDTO.name());
-            routeRepository.save(route.get());
+        try {
+            Route route = Route.builder()
+                    .id(newRouteDTO.id())
+                    .name(newRouteDTO.name())
+                    .build();
+            routeRepository.save(route);
             return ResponseEntity.ok("Route updated");
         }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Route not found");
+        }
     }
 }
