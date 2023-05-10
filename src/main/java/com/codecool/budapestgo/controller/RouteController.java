@@ -3,12 +3,12 @@ package com.codecool.budapestgo.controller;
 import com.codecool.budapestgo.controller.dto.route.NewRouteDTO;
 import com.codecool.budapestgo.controller.dto.route.RouteDTO;
 import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
-import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.service.RouteService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -26,25 +26,17 @@ public class RouteController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRoute(@PathVariable Long id){
+    public void deleteRoute(@Valid @PathVariable @Min(1) Long id){
         routeService.deleteRoute(id);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addRoute(@RequestBody NewRouteDTO newRoute) {
-        try {
-            if (DTOValidator.registrationIsInvalid(newRoute)) {
-                return ResponseEntity.badRequest().body("Fields cannot be empty");
-            } else {
+    public ResponseEntity<String> addRoute(@Valid @RequestBody NewRouteDTO newRoute) {
                 return routeService.addRoute(newRoute);
-            }
-        }catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @PutMapping("/")
-    public ResponseEntity<String> updateRoute(@RequestBody UpdateRouteDTO newRouteDTO){
+    public ResponseEntity<String> updateRoute(@Valid @RequestBody UpdateRouteDTO newRouteDTO){
         return routeService.updateRoute(newRouteDTO);
     }
 }
