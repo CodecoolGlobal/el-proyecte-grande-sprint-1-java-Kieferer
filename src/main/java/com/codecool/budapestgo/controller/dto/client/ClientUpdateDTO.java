@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.controller.dto.client;
 
-import com.codecool.budapestgo.dao.model.Client;
+import com.codecool.budapestgo.dao.model.client.Client;
 
 public record ClientUpdateDTO (Long id, String password){
     public static ClientUpdateDTO of(Client client){

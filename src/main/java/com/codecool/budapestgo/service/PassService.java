@@ -2,7 +2,7 @@ package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.pass.PassDTO;
 import com.codecool.budapestgo.controller.dto.pass.PassResponseDTO;
-import com.codecool.budapestgo.dao.model.Client;
+import com.codecool.budapestgo.dao.model.client.Client;
 import com.codecool.budapestgo.dao.repository.ClientRepository;
 import com.codecool.budapestgo.dao.model.Pass;
 import com.codecool.budapestgo.dao.repository.PassRepository;
