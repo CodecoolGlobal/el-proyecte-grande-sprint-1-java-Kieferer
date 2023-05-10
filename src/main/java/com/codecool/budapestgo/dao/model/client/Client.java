@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Entity
-public class Client implements UserDetails {
+public class Client  {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE

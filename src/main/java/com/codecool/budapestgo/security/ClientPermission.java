@@ -6,7 +6,7 @@ public enum ClientPermission {
     PASS_READ("pass:read"),
     PASS_WRITE("pass:write"),
     ROUTE_READ("route:read"),
-    ROUTE_WRITE("rotue:write"),
+    ROUTE_WRITE("route:write"),
     SCHEDULE_READ("schedule:read"),
     SCHEDULE_WRITE("schedule:write"),
     STOP_READ("stop:read"),
