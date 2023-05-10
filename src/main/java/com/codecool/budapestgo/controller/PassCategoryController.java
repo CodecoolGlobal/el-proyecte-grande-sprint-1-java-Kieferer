@@ -2,13 +2,13 @@ package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryRegisterDTO;
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
-import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.service.PassCategoryService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -22,24 +22,16 @@ public class PassCategoryController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerPass(@RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
-       try {
-           if (DTOValidator.registrationIsInvalid(passCategoryRegisterDTO)) {
-               return ResponseEntity.badRequest().body("Fields cannot be empty");
-           } else {
+    public ResponseEntity<String> registerPass(@Valid @RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
                return passCategoryService.addPassCategory(passCategoryRegisterDTO);
-           }
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePassCategoryById(@PathVariable Long id){
+    public ResponseEntity<String> deletePassCategoryById(@Valid @PathVariable @Min(1) Long id){
        return passCategoryService.deletePassCategoryById(id);
     }
     @PutMapping
-    public ResponseEntity<String> updatePassCategory(@RequestBody PassCategoryResponseDTO passCategoryResponseDTO){
+    public ResponseEntity<String> updatePassCategory(@Valid @RequestBody PassCategoryResponseDTO passCategoryResponseDTO){
         return passCategoryService.updatePassCategory(passCategoryResponseDTO);
     }
 }
