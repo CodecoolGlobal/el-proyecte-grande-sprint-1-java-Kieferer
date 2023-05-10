@@ -1,12 +1,12 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
-import com.codecool.budapestgo.controller.dto.validator.DTOValidator;
 import com.codecool.budapestgo.service.StopService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -23,23 +23,15 @@ public class StopController {
         return stopService.getAllStops();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStop(@PathVariable Long id){
+    public ResponseEntity<String> deleteStop(@Valid @PathVariable @Min(1) Long id){
       return stopService.deleteStopById(id);
     }
     @PostMapping("/add")
-    public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO) {
-        try {
-            if (DTOValidator.registrationIsInvalid(stopDTO)) {
-                return ResponseEntity.badRequest().body("Fields cannot be empty");
-            } else {
+    public ResponseEntity<String> registerStop(@Valid @RequestBody StopDTO stopDTO) {
                 return stopService.addStop(stopDTO);
-            }
-        }catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
     }
     @PutMapping("/")
-    public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
+    public ResponseEntity<String> updateStop(@Valid @RequestBody StopDTO stopDTO){
         return stopService.updateStop(stopDTO);
     }
     @DeleteMapping("/all")
