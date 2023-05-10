@@ -21,7 +21,6 @@ public class Client implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private final Long id;
     @Enumerated(EnumType.STRING)
-    @NonNull
     private final ClientCategoryType type;
     @NonNull
     private String email;
