@@ -37,4 +37,8 @@ public class RouteController {
     public ResponseEntity<String> updateRoute(@RequestBody UpdateRouteDTO newRouteDTO){
         return routeService.updateRoute(newRouteDTO);
     }
+    @DeleteMapping("/all")
+    public ResponseEntity<String> deleteAllRoutes(){
+        return  routeService.deleteAllRoutes();
+    }
 }

@@ -49,4 +49,13 @@ public class RouteService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Route not found");
         }
     }
+
+    public ResponseEntity<String> deleteAllRoutes() {
+        try {
+            routeRepository.deleteAll();
+            return ResponseEntity.ok("All route deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Routes couldn't be deleted");
+        }
+    }
 }
