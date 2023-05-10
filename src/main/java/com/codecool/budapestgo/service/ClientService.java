@@ -27,26 +27,20 @@ public class ClientService {
                 .map(ClientDTO::of)
                 .toList();
     }
-    public ResponseEntity<ClientDTO> getClientById(Long id){
-        return clientRepository.findById(id)
-                .map(client ->  ResponseEntity.ok(ClientDTO.of(client)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-    public void deleteClientById(Long id){
-        clientRepository.deleteById(id);
-    }
-    public ResponseEntity<String> addClient(ClientRegisterDTO clientToRegister){
-        Optional<Client> searchedClient = clientRepository.findClientByEmail(clientToRegister.email());
-        if(searchedClient.isEmpty()) {
-            Client client = Client.builder()
-                    .email(clientToRegister.email())
-                    .password(clientToRegister.password())
-                    .type(ClientCategoryType.CUSTOMER)
-                    .build();
-            clientRepository.save(client);
-            return ResponseEntity.ok("User created");
+    public ResponseEntity<String> deleteClientById(Long id){
+        if(isClientExistById(id)) {
+            clientRepository.deleteById(id);
+            return ResponseEntity.ok("Client deleted");
         }
-        return ResponseEntity.badRequest().body("User with that email already exist.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid id");
+    }
+    public ResponseEntity<String> addClient(ClientRegisterDTO clientRegisterDTO){
+                if (getClientByEmail(clientRegisterDTO.email()).isEmpty()) {
+                    Client client = customerOf(clientRegisterDTO);
+                    clientRepository.save(client);
+                    return ResponseEntity.ok("User created");
+                }
+                return ResponseEntity.badRequest().body("User with that email already exist.");
     }
     public ResponseEntity<String> updateClient(ClientUpdateDTO updateClient){
         Optional<Client> client = clientRepository.findById(updateClient.id());
@@ -59,16 +53,29 @@ public class ClientService {
     }
 
     public Client login(String email, String password) {
-        Optional<Client> client = clientRepository.findClientByEmail(email);
+        Optional<Client> client = getClientByEmail(email);
         if (client.isPresent()){
             if (client.get().getPassword().equals(password))
                 return client.get();
             else
-                //TODO: costume exception for bad password
                 throw new RuntimeException();
         }
         else
             //TODO: costume exception for bad email
             throw new NoSuchElementException();
+    }
+
+    private Client customerOf(ClientRegisterDTO clientRegisterDTO){
+        return Client.builder()
+                .email(clientRegisterDTO.email())
+                .password(clientRegisterDTO.password())
+                .type(ClientCategoryType.CUSTOMER)
+                .build();
+    }
+    private Optional<Client> getClientByEmail(String email){
+        return clientRepository.findClientByEmail(email);
+    }
+    private boolean isClientExistById(Long id){
+        return clientRepository.findById(id).isPresent();
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Route {

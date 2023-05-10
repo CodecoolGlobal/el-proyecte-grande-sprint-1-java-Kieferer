@@ -6,6 +6,7 @@ import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.repository.ScheduleRepository;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,16 +24,10 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public void addSchedule(ScheduleDTO scheduleDTO){
+    public ResponseEntity<String> addSchedule(ScheduleDTO scheduleDTO){
         Optional<Route> route = routeRepository.getRouteByName(scheduleDTO.routeName());
         Optional<Stop> stop = stopRepository.getStopByName(scheduleDTO.stopName());
 
-        if (route.isEmpty() && stop.isEmpty())
-            throw new RuntimeException("There is no matching route and stop");
-        else if (stop.isEmpty())
-            throw new RuntimeException("There is no marching stop");
-        else if (route.isEmpty())
-            throw new RuntimeException("There is no marching route");
 
         Schedule routeSchedule = Schedule.builder()
                 .route(route.get())
@@ -42,6 +37,7 @@ public class ScheduleService {
 
         stop.get().addSchedule(routeSchedule);
         route.get().addSchedule(routeSchedule);
+        return ResponseEntity.ok("Ok");
     }
     public List<Schedule> getRouteSchedule(String name){
         return scheduleRepository.findByRouteName(name);

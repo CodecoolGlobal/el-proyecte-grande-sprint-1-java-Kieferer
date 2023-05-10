@@ -19,13 +19,13 @@ public class StopService {
     public StopService(StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
-    public boolean existsByName(String name) {
+    private boolean existsByName(String name) {
         return stopRepository.getStopByName(name).isPresent();
     }
     public List<StopDTO> getAllStops() {
         return stopRepository.findAll()
                 .stream()
-                .map(stop -> new StopDTO(stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude()))
+                .map(StopDTO::of)
                 .toList();
     }
 
