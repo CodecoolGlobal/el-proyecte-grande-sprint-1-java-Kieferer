@@ -6,6 +6,8 @@ import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.repository.ScheduleRepository;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,5 +64,23 @@ public class ScheduleService {
             schedule.getStop().removeSchedule(schedule);
         });
         scheduleRepository.deleteById(id);
+    }
+
+    public ResponseEntity<String> deleteScheduleByRouteId(Long routeId) {
+        try {
+            scheduleRepository.deleteAll(scheduleRepository.findByRouteId(routeId));
+            return ResponseEntity.ok("Deleted all the schedules that had reference to given route ID");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Schedules couldn't be deleted");
+        }
+    }
+
+    public ResponseEntity<String> deleteScheduleByStopId(Long stopId) {
+        try {
+            scheduleRepository.deleteAll(scheduleRepository.findByStopId(stopId));
+            return ResponseEntity.ok("Deleted all the schedules that had reference to given route ID");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Schedules couldn't be deleted");
+        }
     }
 }
