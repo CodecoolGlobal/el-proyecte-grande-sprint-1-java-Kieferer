@@ -1,9 +1,12 @@
 package com.codecool.budapestgo.controller.dto.pass;
 
 import com.codecool.budapestgo.dao.model.PassCategory;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 @Builder
-public record PassCategoryResponseDTO(String category, String passDuration, long passExpireInDay, int price, Long id) {
+public record PassCategoryResponseDTO(@NotNull @NotBlank String category, @NotNull @NotBlank String passDuration, @NotNull @Min(1) long passExpireInDay,@NotNull int price,@NotNull @Min(1) long id) {
     public static PassCategoryResponseDTO of(PassCategory passCategory) {
         return PassCategoryResponseDTO.builder()
                 .category(passCategory.getCategory())

@@ -1,10 +1,12 @@
 package com.codecool.budapestgo.controller.dto.pass;
 
 import com.codecool.budapestgo.dao.model.PurchasedPass;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record PurchasedPassResponseDTO(String passType, LocalDate expirationDate, String category, int price) {
+public record PurchasedPassResponseDTO(@NotNull @NotBlank String passType,@NotNull @NotBlank LocalDate expirationDate,@NotNull @NotBlank String category,@NotNull int price) {
 
     public static PurchasedPassResponseDTO of(PurchasedPass purchasedPass) {
         return new PurchasedPassResponseDTO(purchasedPass.getPassCategory().getPassDuration(),
