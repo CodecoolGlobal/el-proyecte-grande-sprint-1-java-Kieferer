@@ -3,13 +3,14 @@ package com.codecool.budapestgo.dao.model.client;
 import com.codecool.budapestgo.data.ClientCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Builder
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Entity
-public class Client {
+public class Client implements UserDetails {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE
