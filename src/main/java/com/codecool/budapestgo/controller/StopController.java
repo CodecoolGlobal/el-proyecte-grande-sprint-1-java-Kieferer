@@ -28,7 +28,7 @@ public class StopController {
     public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO) {
       return stopService.addStop(stopDTO);
     }
-    @PutMapping("/")
+    @PutMapping("/update")
     public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
         return stopService.updateStop(stopDTO);
     }
