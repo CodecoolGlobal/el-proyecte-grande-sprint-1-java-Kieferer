@@ -85,4 +85,8 @@ public class ScheduleService {
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Schedules couldn't be deleted");
         }
     }
+
+    public List<Stop> getAllAssignedStopByRouteId(Long routeId) {
+        return scheduleRepository.findStopByRouteId(routeId);
+    }
 }

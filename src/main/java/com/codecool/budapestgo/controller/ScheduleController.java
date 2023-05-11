@@ -45,4 +45,8 @@ public class ScheduleController {
     public ResponseEntity<String> deleteScheduleByStopId(@PathVariable Long stopId){
         return scheduleService.deleteScheduleByStopId(stopId);
     }
+    @GetMapping("/stops-connected-to-route-id/{routeId}")
+    public List<Stop> getAllAssignedStopByRouteId(@PathVariable Long routeId){
+        return scheduleService.getAllAssignedStopByRouteId(routeId);
+    }
 }
