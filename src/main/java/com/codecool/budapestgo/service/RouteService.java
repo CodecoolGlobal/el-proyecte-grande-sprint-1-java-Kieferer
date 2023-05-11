@@ -30,11 +30,12 @@ public class RouteService {
         routeRepository.deleteById(id);
     }
 
-    public void addRoute(NewRouteDTO newRouteDTO) {
-        Route route = Route.builder()
-                .name(newRouteDTO.name())
-                .build();
-        routeRepository.save(route);
+    public ResponseEntity<String> addRoute(NewRouteDTO newRouteDTO) {
+            Route route = Route.builder()
+                    .name(newRouteDTO.name())
+                    .build();
+            routeRepository.save(route);
+            return ResponseEntity.ok("Route created");
     }
 
     public ResponseEntity<String> updateRoute(UpdateRouteDTO updateRouteDTO) {

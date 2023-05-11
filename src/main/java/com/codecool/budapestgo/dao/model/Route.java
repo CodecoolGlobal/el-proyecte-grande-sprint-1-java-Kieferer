@@ -8,11 +8,17 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "route_seq",
+            sequenceName = "route_seq",
+            allocationSize = 1
+    )
     private final Long id;
     @NonNull
     private final String name;

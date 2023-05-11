@@ -12,6 +12,11 @@ import lombok.*;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "client_seq",
+            sequenceName = "client_seq",
+            allocationSize = 1
+    )
     private final Long id;
     @Enumerated(EnumType.STRING)
     @NonNull private final ClientCategoryType type;

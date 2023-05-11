@@ -1,18 +1,20 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.client.ClientDTO;
+import com.codecool.budapestgo.controller.dto.client.ClientLoginDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
 import com.codecool.budapestgo.dao.model.Client;
 import com.codecool.budapestgo.service.ClientService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/client")
@@ -29,39 +31,38 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteClientById(@PathVariable Long id) {
-        clientService.deleteClientById(id);
+    public ResponseEntity<String> deleteClientById(@Valid @PathVariable @Min(1) Long id) {
+       return clientService.deleteClientById(id);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerClient(@RequestBody ClientRegisterDTO clientRegisterDTO) {
+    public ResponseEntity<String> registerClient(@Valid @RequestBody ClientRegisterDTO clientRegisterDTO){
         return clientService.addClient(clientRegisterDTO);
     }
 
     @PutMapping()
-    public ResponseEntity<String> updateClient(@RequestBody ClientUpdateDTO clientUpdateDTO) {
-        return clientService.updateClient(clientUpdateDTO);
+    public ResponseEntity<String> updateClient(@Valid @RequestBody ClientUpdateDTO clientUpdateDTO) {
+                return clientService.updateClient(clientUpdateDTO);
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest, HttpServletResponse response) {
-        String email = loginRequest.get("email");
-        String password = loginRequest.get("password");
+    public ResponseEntity<?> login(@Valid @RequestBody ClientLoginDTO loginRequest, HttpServletResponse response) {
+        ResponseEntity<Client> client = clientService.login(loginRequest.email(),loginRequest.password());
+        if(client.hasBody()) {
+            Cookie privilageCookie = new Cookie("privilege", client.getBody().getType().toString());
+            Cookie emailCookie = new Cookie("email", client.getBody().getEmail());
+            Cookie idCookie = new Cookie("id", client.getBody().getId().toString());
+            setupCookie(idCookie);
+            setupCookie(privilageCookie);
+            setupCookie(emailCookie);
+            response.addCookie(idCookie);
+            response.addCookie(privilageCookie);
+            response.addCookie(emailCookie);
 
-        Client client = clientService.login(email, password);
-
-        Cookie privilageCookie = new Cookie("privilege", client.getType().toString());
-        Cookie emailCookie = new Cookie("email", client.getEmail());
-        Cookie idCookie = new Cookie("id", client.getId().toString());
-        setupCookie(idCookie);
-        setupCookie(privilageCookie);
-        setupCookie(emailCookie);
-        response.addCookie(idCookie);
-        response.addCookie(privilageCookie);
-        response.addCookie(emailCookie);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body("Successful login.");
+        }
+        return ResponseEntity.badRequest().body("Password or email is incorrect.");
     }
 
     private void setupCookie(Cookie cookie) {
