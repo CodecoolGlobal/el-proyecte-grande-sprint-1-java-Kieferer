@@ -19,7 +19,7 @@ public class StopService {
     public StopService(StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
-    public boolean existsByName(String name) {
+    private boolean existsByName(String name) {
         return stopRepository.getStopByName(name).isPresent();
     }
     public List<StopDTO> getAllStops() {

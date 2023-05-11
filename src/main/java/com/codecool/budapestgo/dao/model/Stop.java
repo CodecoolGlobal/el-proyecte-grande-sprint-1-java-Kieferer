@@ -15,6 +15,11 @@ import java.util.List;
 public class Stop {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "stop_seq",
+            sequenceName = "stop_seq",
+            allocationSize = 1
+    )
     private final Long id;
     @NonNull
     private String name;
