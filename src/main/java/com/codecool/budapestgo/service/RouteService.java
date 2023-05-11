@@ -31,15 +31,11 @@ public class RouteService {
     }
 
     public ResponseEntity<String> addRoute(NewRouteDTO newRouteDTO) {
-        Optional<Route> optionalRoute = routeRepository.getRouteByName(newRouteDTO.name());
-        if(optionalRoute.isPresent()) {
             Route route = Route.builder()
                     .name(newRouteDTO.name())
                     .build();
             routeRepository.save(route);
             return ResponseEntity.ok("Route created");
-        }
-            return ResponseEntity.badRequest().body("Route already exist.");
     }
 
     public ResponseEntity<String> updateRoute(UpdateRouteDTO updateRouteDTO) {
