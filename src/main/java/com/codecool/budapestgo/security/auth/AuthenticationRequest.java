@@ -1,16 +1,12 @@
 package com.codecool.budapestgo.security.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class AuthenticationRequest {
 
-    private String email;
-    String password;
+    private final String email;
+    private final String password;
 }

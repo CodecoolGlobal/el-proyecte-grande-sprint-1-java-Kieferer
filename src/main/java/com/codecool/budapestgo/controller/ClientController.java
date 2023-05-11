@@ -3,7 +3,7 @@ package com.codecool.budapestgo.controller;
 import com.codecool.budapestgo.controller.dto.client.ClientDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
-import com.codecool.budapestgo.dao.model.client.Client;
+import com.codecool.budapestgo.dao.model.Client;
 import com.codecool.budapestgo.service.ClientService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

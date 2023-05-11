@@ -1,6 +1,6 @@
-package com.codecool.budapestgo.dao.model.client;
+package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.dao.model.client.Role;
+import com.codecool.budapestgo.dao.types.Role;
 import com.codecool.budapestgo.dao.types.ClientCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +23,7 @@ public class Client implements UserDetails {
     @Enumerated(EnumType.STRING)
     private final ClientCategoryType type;
     @NonNull
+    @Column(unique = true)
     private String email;
     @NonNull
     private String password;

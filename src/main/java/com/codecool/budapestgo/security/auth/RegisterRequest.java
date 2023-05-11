@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.security.auth;
 
-import com.codecool.budapestgo.dao.model.client.Role;
+import com.codecool.budapestgo.dao.types.Role;
 import lombok.*;
 
 @Data

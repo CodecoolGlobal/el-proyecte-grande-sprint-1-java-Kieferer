@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.dao.repository;
 
-import com.codecool.budapestgo.dao.model.client.Client;
+import com.codecool.budapestgo.dao.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

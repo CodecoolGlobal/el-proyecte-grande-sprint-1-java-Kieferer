@@ -1,7 +1,7 @@
 package com.codecool.budapestgo.security.auth;
 
-import com.codecool.budapestgo.dao.model.client.Client;
-import com.codecool.budapestgo.dao.model.client.Role;
+import com.codecool.budapestgo.dao.model.Client;
+import com.codecool.budapestgo.dao.types.Role;
 import com.codecool.budapestgo.dao.repository.ClientRepository;
 import com.codecool.budapestgo.security.config.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +24,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var client = Client.builder()
+        Client client = Client.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
         clientRepository.save(client);
-        var jwtToken = jwtService.generateToken(client);
+        String jwtToken = jwtService.generateToken(client);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -41,9 +43,11 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var client = clientRepository.findClientByEmail(request.getEmail())
+        Client client = clientRepository.findClientByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(client);
+        HashMap<String,Object> additionalClaims  =new HashMap<>();
+        additionalClaims.put("role",client.getRole());
+        String jwtToken = jwtService.generateToken(additionalClaims,client);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
