@@ -4,6 +4,7 @@ import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.service.ScheduleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +30,19 @@ public class ScheduleController {
         return scheduleService.getStopsOfRouteByName(name);
     }
     @GetMapping("/all")
-    public List<Schedule> getAllSchedule(){
+    public List<ScheduleDTO> getAllSchedule(){
         return scheduleService.getAllSchedule();
     }
     @DeleteMapping("/{id}")
     public void deleteScheduleById(@PathVariable Long id){
         scheduleService.deleteScheduleById(id);
+    }
+    @DeleteMapping("/connected-to-route-id/{routeId}")
+    public ResponseEntity<String> deleteScheduleByRouteId(@PathVariable Long routeId){
+        return scheduleService.deleteScheduleByRouteId(routeId);
+    }
+    @DeleteMapping("/connected-to-stop-id/{stopId}")
+    public ResponseEntity<String> deleteScheduleByStopId(@PathVariable Long stopId){
+        return scheduleService.deleteScheduleByStopId(stopId);
     }
 }

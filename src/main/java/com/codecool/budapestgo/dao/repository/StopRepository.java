@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface StopRepository extends JpaRepository<Stop, Long> {
     Optional<Stop> getStopByName(@NonNull String name);
+    Optional<Stop> getStopById(@NonNull Long id);
 }

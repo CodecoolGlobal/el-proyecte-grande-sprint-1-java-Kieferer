@@ -17,6 +17,10 @@ public class RouteController {
     public RouteController(RouteService routeService) {
         this.routeService = routeService;
     }
+    @PutMapping("/update")
+    public ResponseEntity<String> updateRoute(@RequestBody UpdateRouteDTO updateRouteDTO){
+        return routeService.updateRoute(updateRouteDTO);
+    }
 
     @GetMapping("/all")
     public List<RouteDTO> getAllRoutes() {
@@ -33,8 +37,8 @@ public class RouteController {
         routeService.addRoute(newRoute);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<String> updateRoute(@RequestBody UpdateRouteDTO newRouteDTO){
-        return routeService.updateRoute(newRouteDTO);
+    @DeleteMapping("/all")
+    public ResponseEntity<String> deleteAllRoutes(){
+        return  routeService.deleteAllRoutes();
     }
 }
