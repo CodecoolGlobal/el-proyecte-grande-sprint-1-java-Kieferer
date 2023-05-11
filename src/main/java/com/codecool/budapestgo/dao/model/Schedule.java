@@ -20,10 +20,10 @@ public class Schedule {
     private final Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "route_name", referencedColumnName = "name")
+    @JoinColumn(name = "route", referencedColumnName = "id")
     private Route route;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stop_name", referencedColumnName = "name")
+    @JoinColumn(name = "stop", referencedColumnName = "id")
     private Stop stop;
 }

@@ -11,4 +11,8 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT s FROM Schedule s WHERE s.route.name = :name")
     List<Schedule> findByRouteName(@Param("name") String name);
+    @Query("SELECT s FROM Schedule s WHERE s.route.id = :routeId")
+    List<Schedule> findByRouteId(@Param("routeId") Long routeId);
+    @Query("SELECT s FROM Schedule s WHERE s.stop.id = :stopId")
+    List<Schedule> findByStopId(@Param("stopId") Long stopId);
 }

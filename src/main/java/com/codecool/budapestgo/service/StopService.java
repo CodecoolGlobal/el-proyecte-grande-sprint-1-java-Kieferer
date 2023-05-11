@@ -25,14 +25,14 @@ public class StopService {
     public List<StopDTO> getAllStops() {
         return stopRepository.findAll()
                 .stream()
-                .map(StopDTO::of)
+                .map(stop -> new StopDTO(stop.getId(), stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude()))
                 .toList();
     }
 
     public ResponseEntity<StopDTO> getStopById(Long id) {
         return stopRepository.findById(id)
                 .stream()
-                .map(stop ->  ResponseEntity.ok(new StopDTO(stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude())))
+                .map(stop ->  ResponseEntity.ok(new StopDTO(stop.getId(), stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude())))
                 .findFirst()
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

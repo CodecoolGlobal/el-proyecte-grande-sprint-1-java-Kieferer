@@ -7,10 +7,13 @@ import com.codecool.budapestgo.dao.repository.ScheduleRepository;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -25,14 +28,15 @@ public class ScheduleService {
     }
 
     public ResponseEntity<String> addSchedule(ScheduleDTO scheduleDTO){
-        Optional<Route> route = routeRepository.getRouteByName(scheduleDTO.routeName());
-        Optional<Stop> stop = stopRepository.getStopByName(scheduleDTO.stopName());
+        Optional<Route> route = routeRepository.getRouteById(scheduleDTO.routeId());
+        Optional<Stop> stop = stopRepository.getStopById(scheduleDTO.stopId());
 
 
         Schedule routeSchedule = Schedule.builder()
                 .route(route.get())
                 .stop(stop.get())
                 .build();
+
         scheduleRepository.save(routeSchedule);
 
         stop.get().addSchedule(routeSchedule);
@@ -43,8 +47,8 @@ public class ScheduleService {
         return scheduleRepository.findByRouteName(name);
     }
 
-    public List<Schedule> getAllSchedule() {
-        return scheduleRepository.findAll();
+    public List<ScheduleDTO> getAllSchedule() {
+        return scheduleRepository.findAll().stream().map(ScheduleDTO::of).collect(Collectors.toList());
     }
 
     public List<Stop> getStopsOfRouteByName(String name) {
@@ -58,5 +62,23 @@ public class ScheduleService {
             schedule.getStop().removeSchedule(schedule);
         });
         scheduleRepository.deleteById(id);
+    }
+
+    public ResponseEntity<String> deleteScheduleByRouteId(Long routeId) {
+        try {
+            scheduleRepository.deleteAll(scheduleRepository.findByRouteId(routeId));
+            return ResponseEntity.ok("Deleted all the schedules that had reference to given route ID");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Schedules couldn't be deleted");
+        }
+    }
+
+    public ResponseEntity<String> deleteScheduleByStopId(Long stopId) {
+        try {
+            scheduleRepository.deleteAll(scheduleRepository.findByStopId(stopId));
+            return ResponseEntity.ok("Deleted all the schedules that had reference to given route ID");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Schedules couldn't be deleted");
+        }
     }
 }

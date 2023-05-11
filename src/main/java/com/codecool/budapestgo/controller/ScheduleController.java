@@ -33,11 +33,19 @@ public class ScheduleController {
         return scheduleService.getStopsOfRouteByName(name);
     }
     @GetMapping("/all")
-    public List<Schedule> getAllSchedule(){
+    public List<ScheduleDTO> getAllSchedule(){
         return scheduleService.getAllSchedule();
     }
     @DeleteMapping("/{id}")
     public void deleteScheduleById(@Valid @PathVariable @Min(1) Long id){
         scheduleService.deleteScheduleById(id);
+    }
+    @DeleteMapping("/connected-to-route-id/{routeId}")
+    public ResponseEntity<String> deleteScheduleByRouteId(@PathVariable Long routeId){
+        return scheduleService.deleteScheduleByRouteId(routeId);
+    }
+    @DeleteMapping("/connected-to-stop-id/{stopId}")
+    public ResponseEntity<String> deleteScheduleByStopId(@PathVariable Long stopId){
+        return scheduleService.deleteScheduleByStopId(stopId);
     }
 }
