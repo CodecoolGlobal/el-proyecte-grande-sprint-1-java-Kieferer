@@ -48,19 +48,21 @@ public class ClientController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody ClientLoginDTO loginRequest, HttpServletResponse response) {
-        Client client = clientService.login(loginRequest.email(),loginRequest.password());
+        ResponseEntity<Client> client = clientService.login(loginRequest.email(),loginRequest.password());
+        if(client.hasBody()) {
+            Cookie privilageCookie = new Cookie("privilege", client.getBody().getType().toString());
+            Cookie emailCookie = new Cookie("email", client.getBody().getEmail());
+            Cookie idCookie = new Cookie("id", client.getBody().getId().toString());
+            setupCookie(idCookie);
+            setupCookie(privilageCookie);
+            setupCookie(emailCookie);
+            response.addCookie(idCookie);
+            response.addCookie(privilageCookie);
+            response.addCookie(emailCookie);
 
-        Cookie privilageCookie = new Cookie("privilege", client.getType().toString());
-        Cookie emailCookie = new Cookie("email", client.getEmail());
-        Cookie idCookie = new Cookie("id", client.getId().toString());
-        setupCookie(idCookie);
-        setupCookie(privilageCookie);
-        setupCookie(emailCookie);
-        response.addCookie(idCookie);
-        response.addCookie(privilageCookie);
-        response.addCookie(emailCookie);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body("Successful login.");
+        }
+        return ResponseEntity.badRequest().body("Password or email is incorrect.");
     }
 
     private void setupCookie(Cookie cookie) {

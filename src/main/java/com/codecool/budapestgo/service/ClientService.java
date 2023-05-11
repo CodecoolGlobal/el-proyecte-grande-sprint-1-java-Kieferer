@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -52,17 +51,16 @@ public class ClientService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
     }
 
-    public Client login(String email, String password) {
+    public ResponseEntity<Client> login(String email, String password) {
         Optional<Client> client = getClientByEmail(email);
         if (client.isPresent()){
             if (client.get().getPassword().equals(password))
-                return client.get();
+                return ResponseEntity.ok(client.get());
             else
-                throw new RuntimeException();
+                return ResponseEntity.badRequest().build();
         }
         else
-            //TODO: costume exception for bad email
-            throw new NoSuchElementException();
+            return ResponseEntity.notFound().build();
     }
 
     private Client customerOf(ClientRegisterDTO clientRegisterDTO){
