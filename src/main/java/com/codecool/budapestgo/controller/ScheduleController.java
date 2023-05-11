@@ -30,7 +30,7 @@ public class ScheduleController {
         return scheduleService.getStopsOfRouteByName(name);
     }
     @GetMapping("/all")
-    public List<Schedule> getAllSchedule(){
+    public List<ScheduleDTO> getAllSchedule(){
         return scheduleService.getAllSchedule();
     }
     @DeleteMapping("/{id}")
