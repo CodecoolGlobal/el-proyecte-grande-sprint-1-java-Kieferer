@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -26,8 +27,8 @@ public class ScheduleService {
     }
 
     public void addSchedule(ScheduleDTO scheduleDTO){
-        Optional<Route> route = routeRepository.getRouteByName(scheduleDTO.routeName());
-        Optional<Stop> stop = stopRepository.getStopByName(scheduleDTO.stopName());
+        Optional<Route> route = routeRepository.getRouteById(scheduleDTO.routeId());
+        Optional<Stop> stop = stopRepository.getStopById(scheduleDTO.stopId());
 
         if (route.isEmpty() && stop.isEmpty())
             throw new RuntimeException("There is no matching route and stop");
@@ -40,6 +41,7 @@ public class ScheduleService {
                 .route(route.get())
                 .stop(stop.get())
                 .build();
+
         scheduleRepository.save(routeSchedule);
 
         stop.get().addSchedule(routeSchedule);
@@ -49,8 +51,8 @@ public class ScheduleService {
         return scheduleRepository.findByRouteName(name);
     }
 
-    public List<Schedule> getAllSchedule() {
-        return scheduleRepository.findAll();
+    public List<ScheduleDTO> getAllSchedule() {
+        return scheduleRepository.findAll().stream().map(ScheduleDTO::of).collect(Collectors.toList());
     }
 
     public List<Stop> getStopsOfRouteByName(String name) {
