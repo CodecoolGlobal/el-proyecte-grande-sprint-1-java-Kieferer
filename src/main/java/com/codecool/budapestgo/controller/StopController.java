@@ -1,6 +1,8 @@
 package com.codecool.budapestgo.controller;
 
+import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
+import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
 import com.codecool.budapestgo.service.StopService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -27,12 +29,12 @@ public class StopController {
       return stopService.deleteStopById(id);
     }
     @PostMapping("/add")
-    public ResponseEntity<String> registerStop(@Valid @RequestBody StopDTO stopDTO) {
-                return stopService.addStop(stopDTO);
+    public ResponseEntity<String> registerStop(@Valid @RequestBody NewStopDTO newStopDTO) {
+                return stopService.addStop(newStopDTO);
     }
     @PutMapping("/update")
-    public ResponseEntity<String> updateStop(@Valid @RequestBody StopDTO stopDTO){
-        return stopService.updateStop(stopDTO);
+    public ResponseEntity<String> updateStop(@Valid @RequestBody UpdateStopDTO updateStopDTO){
+        return stopService.updateStop(updateStopDTO);
     }
     @DeleteMapping("/all")
     public ResponseEntity<String> deleteAllStop(){
