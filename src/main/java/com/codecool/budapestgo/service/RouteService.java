@@ -39,7 +39,7 @@ public class RouteService {
     }
 
     public ResponseEntity<String> updateRoute(UpdateRouteDTO updateRouteDTO) {
-        Route route = routeRepository.getRouteById(updateRouteDTO.id()).orElseThrow(() -> new RuntimeException("There is no already existing Route in this ID so it can't be updated."));
+        Route route = routeRepository.getRouteById(updateRouteDTO.id()).orElseThrow(() -> new RuntimeException("There is no existing Route in this ID so it can't be updated."));
         List<Schedule> schedules = new ArrayList<>(route.getSchedules());
         schedules.forEach(route::removeSchedule);
 
@@ -49,7 +49,7 @@ public class RouteService {
                 .schedules(schedules)
                 .build();
 
-        schedules.forEach(route::addSchedule);
+        schedules.forEach(updatedRoute::addSchedule);
 
         routeRepository.save(updatedRoute);
         return ResponseEntity.ok("Route updated");
