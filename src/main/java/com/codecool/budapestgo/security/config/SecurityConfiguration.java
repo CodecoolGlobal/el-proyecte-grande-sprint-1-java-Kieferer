@@ -11,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.codecool.budapestgo.dao.types.Role.*;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -23,7 +25,8 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/register","/authenticate").permitAll()
+                .requestMatchers("/client/**").hasAnyRole(ADMIN.name(), CUSTOMER.name(), EMPLOYEE.name())
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

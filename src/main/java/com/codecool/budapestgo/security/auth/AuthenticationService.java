@@ -27,7 +27,7 @@ public class AuthenticationService {
         Client client = Client.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(Role.CUSTOMER)
                 .build();
         clientRepository.save(client);
         String jwtToken = jwtService.generateToken(client);

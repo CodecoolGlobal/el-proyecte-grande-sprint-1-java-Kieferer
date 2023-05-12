@@ -5,7 +5,7 @@ import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
 import com.codecool.budapestgo.dao.model.Client;
 import com.codecool.budapestgo.dao.repository.ClientRepository;
-import com.codecool.budapestgo.dao.types.ClientCategoryType;
+import com.codecool.budapestgo.dao.types.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class ClientService {
             Client client = Client.builder()
                     .email(clientToRegister.email())
                     .password(clientToRegister.password())
-                    .type(ClientCategoryType.CUSTOMER)
+                    .role(Role.CUSTOMER)
                     .build();
             clientRepository.save(client);
             return ResponseEntity.ok("User created");

@@ -1,7 +1,6 @@
 package com.codecool.budapestgo.dao.model;
 
 import com.codecool.budapestgo.dao.types.Role;
-import com.codecool.budapestgo.dao.types.ClientCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,8 +19,6 @@ public class Client implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private final Long id;
-    @Enumerated(EnumType.STRING)
-    private final ClientCategoryType type;
     @NonNull
     @Column(unique = true)
     private String email;
@@ -36,7 +33,7 @@ public class Client implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities();
     }
 
     @Override

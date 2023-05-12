@@ -4,6 +4,6 @@ import com.codecool.budapestgo.dao.model.Client;
 
 public record ClientDTO(Long id, String email, String clientCategoryType) {
     public static ClientDTO of(Client client) {
-        return new ClientDTO(client.getId(),client.getEmail(), client.getType().name());
+        return new ClientDTO(client.getId(),client.getEmail(), client.getRole().name());
     }
 }

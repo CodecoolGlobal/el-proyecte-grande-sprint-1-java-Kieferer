@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class ClientController {
 
         Client client = clientService.login(email, password);
 
-        Cookie privilageCookie = new Cookie("privilege", client.getType().toString());
+        Cookie privilageCookie = new Cookie("privilege", client.getRole().toString());
         Cookie emailCookie = new Cookie("email", client.getEmail());
         Cookie idCookie = new Cookie("id", client.getId().toString());
         setupCookie(idCookie);
