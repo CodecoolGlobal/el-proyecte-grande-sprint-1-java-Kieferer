@@ -8,11 +8,8 @@ import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,20 +25,20 @@ public class ScheduleService {
     }
 
     public ResponseEntity<String> addSchedule(ScheduleDTO scheduleDTO){
-        Optional<Route> route = routeRepository.getRouteById(scheduleDTO.routeId());
-        Optional<Stop> stop = stopRepository.getStopById(scheduleDTO.stopId());
+        Route route = routeRepository.getRouteById(scheduleDTO.routeId()).orElseThrow(() -> new RuntimeException("There is no existing Route in this ID"));;
+        Stop stop = stopRepository.getStopById(scheduleDTO.stopId()).orElseThrow(() -> new RuntimeException("There is no existing Stop in this ID"));;
 
 
         Schedule routeSchedule = Schedule.builder()
-                .route(route.get())
-                .stop(stop.get())
+                .route(route)
+                .stop(stop)
                 .build();
 
         scheduleRepository.save(routeSchedule);
 
-        stop.get().addSchedule(routeSchedule);
-        route.get().addSchedule(routeSchedule);
-        return ResponseEntity.ok("Ok");
+        stop.addSchedule(routeSchedule);
+        route.addSchedule(routeSchedule);
+        return ResponseEntity.ok("Created new schedule");
     }
     public List<Schedule> getRouteSchedule(String name){
         return scheduleRepository.findByRouteName(name);
