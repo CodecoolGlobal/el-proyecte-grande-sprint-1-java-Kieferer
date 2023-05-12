@@ -1,7 +1,10 @@
 package com.codecool.budapestgo.service;
 
 
+import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
+import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
+import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.data.Point;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
@@ -9,8 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StopService {
@@ -46,11 +49,12 @@ public class StopService {
                 .body("Stop not found.");
     }
 
-    public ResponseEntity<String> addStop(StopDTO stopDTO) {
-        if(!existsByName(stopDTO.name())) {
+    public ResponseEntity<String> addStop(NewStopDTO newStopDTO) {
+        if(!existsByName(newStopDTO.name())) {
             Stop stop = Stop.builder()
-                    .name(stopDTO.name())
-                    .location(new Point(stopDTO.latitude(), stopDTO.longitude()))
+                    .name(newStopDTO.name())
+                    .location(new Point(newStopDTO.latitude(), newStopDTO.longitude()))
+                    .schedules(new ArrayList<>())
                     .build();
             stopRepository.save(stop);
             return ResponseEntity.ok("Stop created");
@@ -59,15 +63,22 @@ public class StopService {
                 .body("Stop already exist.");
     }
 
-    public ResponseEntity<String> updateStop(StopDTO stopDTO) {
-        Optional<Stop> stop = stopRepository.getStopByName(stopDTO.name());
-        if (stop.isPresent()) {
-            stop.get().setLocation(new Point(stopDTO.latitude(),stopDTO.longitude()));
-            stopRepository.save(stop.get());
-            return ResponseEntity.ok("Stop updated");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Stop not found");
+    public ResponseEntity<String> updateStop(UpdateStopDTO updateStopDTO) {
+        Stop stop = stopRepository.getStopById(updateStopDTO.id()).orElseThrow(() -> new RuntimeException("There is no existing Stop in this ID so it can't be updated. " + updateStopDTO.id()));
+        List<Schedule> schedules = new ArrayList<>(stop.getSchedules());
+        schedules.forEach(stop::removeSchedule);
+
+        Stop updatedStop = Stop.builder()
+                .id(updateStopDTO.id())
+                .name(updateStopDTO.name())
+                .location(new Point(updateStopDTO.latitude(), updateStopDTO.longitude()))
+                .schedules(new ArrayList<>())
+                .build();
+
+        schedules.forEach(updatedStop::addSchedule);
+
+        stopRepository.save(updatedStop);
+        return ResponseEntity.ok("Stop updated");
     }
 
     public ResponseEntity<String> deleteAllStops() {
