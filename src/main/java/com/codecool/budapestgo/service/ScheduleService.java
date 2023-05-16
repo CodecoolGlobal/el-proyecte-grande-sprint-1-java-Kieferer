@@ -1,5 +1,6 @@
 package com.codecool.budapestgo.service;
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
 import com.codecool.budapestgo.dao.model.Schedule;
@@ -25,8 +26,8 @@ public class ScheduleService {
     }
 
     public ResponseEntity<String> addSchedule(ScheduleDTO scheduleDTO){
-        Route route = routeRepository.getRouteById(scheduleDTO.routeId()).orElseThrow(() -> new RuntimeException("There is no existing Route in this ID"));;
-        Stop stop = stopRepository.getStopById(scheduleDTO.stopId()).orElseThrow(() -> new RuntimeException("There is no existing Stop in this ID"));;
+        Route route = routeRepository.getRouteById(scheduleDTO.routeId()).orElseThrow(() -> new NotFoundException("Route with ID " + scheduleDTO.routeId()));
+        Stop stop = stopRepository.getStopById(scheduleDTO.stopId()).orElseThrow(() -> new NotFoundException("Stop with ID " + scheduleDTO.stopId()));
 
 
         Schedule routeSchedule = Schedule.builder()
