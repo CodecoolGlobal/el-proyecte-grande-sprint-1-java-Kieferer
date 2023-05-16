@@ -6,7 +6,7 @@ import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
 import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
 import com.codecool.budapestgo.dao.model.*;
-import com.codecool.budapestgo.dao.types.ClientCategoryType;
+import com.codecool.budapestgo.dao.types.Role;
 import com.codecool.budapestgo.data.Point;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class DtoMapper {
         return Client.builder()
                 .email(clientRegisterDTO.email())
                 .password(clientRegisterDTO.password())
-                .type(ClientCategoryType.CUSTOMER)
+                .role(Role.CUSTOMER)
                 .build();
     }
     public static Stop toEntity(NewStopDTO newStopDTO){

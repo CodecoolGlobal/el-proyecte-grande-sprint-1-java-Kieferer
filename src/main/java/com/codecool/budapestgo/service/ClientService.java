@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +46,11 @@ public class ClientService {
 
     public ResponseEntity<Client> login(String email, String password) {
         Client client = getClientByEmail(email);
-            if (client.getPassword().equals(password))
+        System.out.println("asdasd");
+            if (client.getPassword().equals(password)) {
+                System.out.println("asdasd");
                 return ResponseEntity.ok(client);
+            }
             else
                 return ResponseEntity.badRequest().build();
     }
