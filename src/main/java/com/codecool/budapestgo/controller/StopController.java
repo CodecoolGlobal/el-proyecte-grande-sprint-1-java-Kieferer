@@ -26,11 +26,11 @@ public class StopController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteStop(@Valid @PathVariable @Min(1) Long id){
-      return stopService.deleteStopById(id);
+        return stopService.deleteStopById(id);
     }
     @PostMapping("/add")
     public ResponseEntity<String> registerStop(@Valid @RequestBody NewStopDTO newStopDTO) {
-                return stopService.addStop(newStopDTO);
+        return stopService.addStop(newStopDTO);
     }
     @PutMapping("/update")
     public ResponseEntity<String> updateStop(@Valid @RequestBody UpdateStopDTO updateStopDTO){
