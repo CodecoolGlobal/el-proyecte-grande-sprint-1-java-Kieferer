@@ -15,14 +15,10 @@ import java.util.List;
 @Entity
 public class Stop {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(
-            name = "stop_seq",
-            sequenceName = "stop_seq",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
     @NonNull
+    @Column(unique = true)
     private String name;
     @Embedded
     @NonNull

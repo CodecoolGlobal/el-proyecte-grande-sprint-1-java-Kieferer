@@ -14,12 +14,7 @@ import java.util.List;
 @Entity
 public class Route {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(
-            name = "route_seq",
-            sequenceName = "route_seq",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
     @NonNull
     private final String name;
