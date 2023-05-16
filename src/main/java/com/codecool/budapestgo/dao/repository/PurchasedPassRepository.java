@@ -11,5 +11,5 @@ public interface PurchasedPassRepository extends JpaRepository<PurchasedPass,Lon
     List<PurchasedPass> getAllExpiredPassesByClient_id(Long id);
     @Query("SELECT p FROM PurchasedPass p WHERE p.expireTime > NOW() AND  p.client.id = :id")
     List<PurchasedPass> getActivePassesByClient_id(Long id);
-    boolean deleteAllByClient_Id(Long id);
+    int deleteAllByClient_Id(Long id);
 }
