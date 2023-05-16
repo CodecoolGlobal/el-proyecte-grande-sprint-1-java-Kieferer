@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.dao.model;
 
-import com.codecool.budapestgo.dao.types.Role;
+import com.codecool.budapestgo.dao.types.ClientCategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 public class Client implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
     @NonNull
     @Column(unique = true)

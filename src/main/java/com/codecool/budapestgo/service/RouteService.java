@@ -3,6 +3,7 @@ package com.codecool.budapestgo.service;
 import com.codecool.budapestgo.controller.dto.route.NewRouteDTO;
 import com.codecool.budapestgo.controller.dto.route.RouteDTO;
 import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
@@ -30,15 +31,16 @@ public class RouteService {
         routeRepository.deleteById(id);
     }
 
-    public void addRoute(NewRouteDTO newRouteDTO) {
-        Route route = Route.builder()
-                .name(newRouteDTO.name())
-                .build();
-        routeRepository.save(route);
+    public ResponseEntity<String> addRoute(NewRouteDTO newRouteDTO) {
+            Route route = Route.builder()
+                    .name(newRouteDTO.name())
+                    .build();
+            routeRepository.save(route);
+            return ResponseEntity.ok("Route created");
     }
 
     public ResponseEntity<String> updateRoute(UpdateRouteDTO updateRouteDTO) {
-        Route route = routeRepository.getRouteById(updateRouteDTO.id()).orElseThrow(() -> new RuntimeException("There is no already existing Route in this ID so it can't be updated."));
+        Route route = routeRepository.getRouteById(updateRouteDTO.id()).orElseThrow(() -> new NotFoundException("Route with ID " + updateRouteDTO.id()));
         List<Schedule> schedules = new ArrayList<>(route.getSchedules());
         schedules.forEach(route::removeSchedule);
 
@@ -48,7 +50,7 @@ public class RouteService {
                 .schedules(schedules)
                 .build();
 
-        schedules.forEach(route::addSchedule);
+        schedules.forEach(updatedRoute::addSchedule);
 
         routeRepository.save(updatedRoute);
         return ResponseEntity.ok("Route updated");

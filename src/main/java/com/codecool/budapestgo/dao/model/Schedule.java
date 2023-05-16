@@ -5,14 +5,14 @@ import lombok.*;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Getter
 @Setter
 @Entity
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private final Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route", referencedColumnName = "id")

@@ -1,17 +1,16 @@
 package com.codecool.budapestgo.service;
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.repository.ScheduleRepository;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,26 +25,21 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public void addSchedule(ScheduleDTO scheduleDTO){
-        Optional<Route> route = routeRepository.getRouteById(scheduleDTO.routeId());
-        Optional<Stop> stop = stopRepository.getStopById(scheduleDTO.stopId());
+    public ResponseEntity<String> addSchedule(ScheduleDTO scheduleDTO){
+        Route route = routeRepository.getRouteById(scheduleDTO.routeId()).orElseThrow(() -> new NotFoundException("Route with ID " + scheduleDTO.routeId()));
+        Stop stop = stopRepository.getStopById(scheduleDTO.stopId()).orElseThrow(() -> new NotFoundException("Stop with ID " + scheduleDTO.stopId()));
 
-        if (route.isEmpty() && stop.isEmpty())
-            throw new RuntimeException("There is no matching route and stop");
-        else if (stop.isEmpty())
-            throw new RuntimeException("There is no marching stop");
-        else if (route.isEmpty())
-            throw new RuntimeException("There is no marching route");
 
         Schedule routeSchedule = Schedule.builder()
-                .route(route.get())
-                .stop(stop.get())
+                .route(route)
+                .stop(stop)
                 .build();
 
         scheduleRepository.save(routeSchedule);
 
-        stop.get().addSchedule(routeSchedule);
-        route.get().addSchedule(routeSchedule);
+        stop.addSchedule(routeSchedule);
+        route.addSchedule(routeSchedule);
+        return ResponseEntity.ok("Created new schedule");
     }
     public List<Schedule> getRouteSchedule(String name){
         return scheduleRepository.findByRouteName(name);
@@ -84,5 +78,9 @@ public class ScheduleService {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Schedules couldn't be deleted");
         }
+    }
+
+    public List<Stop> getAllAssignedStopByRouteId(Long routeId) {
+        return scheduleRepository.findStopByRouteId(routeId);
     }
 }

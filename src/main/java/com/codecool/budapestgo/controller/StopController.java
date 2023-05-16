@@ -1,7 +1,11 @@
 package com.codecool.budapestgo.controller;
 
+import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
+import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
 import com.codecool.budapestgo.service.StopService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +25,16 @@ public class StopController {
         return stopService.getAllStops();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStop(@PathVariable Long id){
-      return stopService.deleteStopById(id);
+    public ResponseEntity<String> deleteStop(@Valid @PathVariable @Min(1) Long id){
+        return stopService.deleteStopById(id);
     }
     @PostMapping("/add")
-    public ResponseEntity<String> registerStop(@RequestBody StopDTO stopDTO) {
-      return stopService.addStop(stopDTO);
+    public ResponseEntity<String> registerStop(@Valid @RequestBody NewStopDTO newStopDTO) {
+        return stopService.addStop(newStopDTO);
     }
-    @PutMapping("/")
-    public ResponseEntity<String> updateStop(@RequestBody StopDTO stopDTO){
-        return stopService.updateStop(stopDTO);
+    @PutMapping("/update")
+    public ResponseEntity<String> updateStop(@Valid @RequestBody UpdateStopDTO updateStopDTO){
+        return stopService.updateStop(updateStopDTO);
     }
     @DeleteMapping("/all")
     public ResponseEntity<String> deleteAllStop(){
