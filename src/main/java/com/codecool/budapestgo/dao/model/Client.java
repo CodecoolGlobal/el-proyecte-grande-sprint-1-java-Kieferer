@@ -11,17 +11,15 @@ import lombok.*;
 @Entity
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(
-            name = "client_seq",
-            sequenceName = "client_seq",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
     @Enumerated(EnumType.STRING)
     @NonNull private final ClientCategoryType type;
-    @NonNull private String email;
-    @NonNull private String password;
+    @NonNull
+    @Column(unique = true)
+    private final String email;
+    @NonNull
+    private String password;
     public void setPassword(@NonNull String password) {
         this.password = password;
     }
