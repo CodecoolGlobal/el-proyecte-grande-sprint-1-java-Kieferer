@@ -37,12 +37,12 @@ public class ClientController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerClient(@Valid @RequestBody ClientRegisterDTO clientRegisterDTO){
-        return clientService.addClient(clientRegisterDTO);
+       return clientService.addClient(clientRegisterDTO);
     }
 
     @PutMapping()
     public ResponseEntity<String> updateClient(@Valid @RequestBody ClientUpdateDTO clientUpdateDTO) {
-                return clientService.updateClient(clientUpdateDTO);
+       return clientService.updateClient(clientUpdateDTO);
     }
 
 
@@ -60,13 +60,13 @@ public class ClientController {
             response.addCookie(privilageCookie);
             response.addCookie(emailCookie);
 
-            return ResponseEntity.status(HttpStatus.OK).body("Successful login.");
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.badRequest().body("Password or email is incorrect.");
     }
 
     private void setupCookie(Cookie cookie) {
         cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60); //1 day
+        cookie.setMaxAge(24 * 60 * 30); //1 day
     }
 }

@@ -23,7 +23,7 @@ public class PassCategoryController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerPass(@Valid @RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
-               return passCategoryService.addPassCategory(passCategoryRegisterDTO);
+       return passCategoryService.addPassCategory(passCategoryRegisterDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -32,6 +32,6 @@ public class PassCategoryController {
     }
     @PutMapping
     public ResponseEntity<String> updatePassCategory(@Valid @RequestBody PassCategoryResponseDTO passCategoryResponseDTO){
-        return passCategoryService.updatePassCategory(passCategoryResponseDTO);
+       return passCategoryService.updatePassCategory(passCategoryResponseDTO);
     }
 }

@@ -33,11 +33,11 @@ public class PurchasedPassController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerPass(@Valid @RequestBody PassDTO passDTO){
-                return purchasedPassService.addPass(passDTO);
+       return purchasedPassService.addPass(passDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAllPassOfClient(@Valid @PathVariable @Min(1) Long id){
-       return purchasedPassService.deletePassesByClientId(id);
+      return purchasedPassService.deletePassesByClientId(id);
     }
 }
