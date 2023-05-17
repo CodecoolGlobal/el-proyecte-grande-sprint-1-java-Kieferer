@@ -21,16 +21,16 @@ public class PassCategoryController {
         return passCategoryService.getAllPassCategory();
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ResponseEntity<String> registerPass(@Valid @RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
        return passCategoryService.addPassCategory(passCategoryRegisterDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/{id}")
     public ResponseEntity<String> deletePassCategoryById(@Valid @PathVariable @Min(1) Long id){
        return passCategoryService.deletePassCategoryById(id);
     }
-    @PutMapping
+    @PutMapping("/api")
     public ResponseEntity<String> updatePassCategory(@Valid @RequestBody PassCategoryResponseDTO passCategoryResponseDTO){
        return passCategoryService.updatePassCategory(passCategoryResponseDTO);
     }

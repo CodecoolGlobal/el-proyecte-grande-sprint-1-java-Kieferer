@@ -1,6 +1,5 @@
 package com.codecool.budapestgo.security.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +26,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/register","/authenticate").permitAll()
                 .requestMatchers("/client/**").hasAnyRole(ADMIN.name(), CUSTOMER.name(), EMPLOYEE.name())
+                .requestMatchers("/category/api/**","/route/**","/stop/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
