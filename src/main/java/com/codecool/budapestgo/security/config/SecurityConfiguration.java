@@ -24,9 +24,27 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/register","/authenticate").permitAll()
-                .requestMatchers("/client/**").hasAnyRole(ADMIN.name(), CUSTOMER.name(), EMPLOYEE.name())
-                .requestMatchers("/category/api/**","/route/**","/stop/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
+                .requestMatchers("/",
+                                 "/register",
+                                 "/authenticate"
+                                ).permitAll()
+                .requestMatchers("/client/**",
+                        "/pass/**",
+                        "/category/all",
+                        "/route/all",
+                        "/stop/all",
+                        "/stops/{name}",
+                        "/schedule/all",
+                        "/schedule/{name}",
+                        "/stops-connected-to-route-id/{routeId}"
+                    ).hasAnyRole(ADMIN.name(), CUSTOMER.name(), EMPLOYEE.name())
+                .requestMatchers("/client/**",
+                                 "/category/**",
+                                 "/pass/**",
+                                 "/route/**",
+                                 "/stop/**",
+                                 "/schedule/**"
+                                ).hasAnyRole(ADMIN.name(),EMPLOYEE.name())
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

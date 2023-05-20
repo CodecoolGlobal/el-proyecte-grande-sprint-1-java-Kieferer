@@ -1,9 +1,10 @@
 package com.codecool.budapestgo.security.auth;
 
+import com.codecool.budapestgo.customExceptionHandler.InvalidLoginException;
 import com.codecool.budapestgo.dao.model.Client;
-import com.codecool.budapestgo.dao.types.Role;
 import com.codecool.budapestgo.dao.repository.ClientRepository;
 import com.codecool.budapestgo.security.config.JwtService;
+import com.codecool.budapestgo.utils.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,12 +25,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        Client client = Client.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.CUSTOMER)
-                .build();
+        String password = passwordEncoder.encode(request.getPassword());
+        Client client = DtoMapper.toEntity(request,password);
         clientRepository.save(client);
+
         String jwtToken = jwtService.generateToken(client);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -37,20 +36,25 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
         Client client = clientRepository.findClientByEmail(request.getEmail())
-                .orElseThrow();
-        HashMap<String,Object> additionalClaims  =new HashMap<>();
+                .orElseThrow(InvalidLoginException::new);
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+        HashMap<String,Object> additionalClaims  = new HashMap<>();
         additionalClaims.put("role",client.getRole());
         String jwtToken = jwtService.generateToken(additionalClaims,client);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .id(client.getId())
                 .build();
+        }catch (Exception e){
+            throw new InvalidLoginException();
+        }
     }
-
 }

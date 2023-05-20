@@ -22,7 +22,7 @@ public class PassCategoryController {
     }
 
     @PostMapping("/api/register")
-    public ResponseEntity<String> registerPass(@Valid @RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
+    public ResponseEntity<String> registerCategory(@Valid @RequestBody PassCategoryRegisterDTO passCategoryRegisterDTO){
        return passCategoryService.addPassCategory(passCategoryRegisterDTO);
     }
 

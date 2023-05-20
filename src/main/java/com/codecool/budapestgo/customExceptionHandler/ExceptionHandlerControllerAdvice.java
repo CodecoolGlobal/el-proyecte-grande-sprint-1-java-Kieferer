@@ -36,8 +36,8 @@ public class ExceptionHandlerControllerAdvice {
         String message = cause.substring(detailStartIndex + 1).trim().replaceAll("[()]", "");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
     }
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
+    @ExceptionHandler({NotFoundException.class, InvalidLoginException.class})
+    public ResponseEntity<String> handleCustomNotFoundException(Exception e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
     @ExceptionHandler({SQLException.class, PersistenceException.class})
