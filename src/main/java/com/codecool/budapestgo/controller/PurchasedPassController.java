@@ -22,7 +22,7 @@ public class PurchasedPassController {
     }
 
     @GetMapping("/active/{email}")
-    public List<PurchasedPassResponseDTO> getActivePasses(@PathVariable  String email){
+    public List<PurchasedPassResponseDTO> getActivePasses(@PathVariable String email){
         return purchasedPassService.getActivePasses(email);
     }
     @GetMapping("/expired/{email}")

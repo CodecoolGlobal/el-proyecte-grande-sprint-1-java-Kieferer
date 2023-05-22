@@ -22,19 +22,19 @@ public class ClientService {
                 .map(ClientDTO::of)
                 .toList();
     }
-    public ResponseEntity<String> deleteClientById(Long id){
-        Client client = clientRepository.findById(id).orElseThrow(() -> new NotFoundException("Client with id " + id));
-        clientRepository.deleteById(id);
+    public ResponseEntity<String> deleteClientByEmail(String email){
+        getClientByEmail(email);
+        clientRepository.deleteByEmail(email);
         return Response.successful("Deleted");
     }
 
     public ResponseEntity<String> updateClient(ClientUpdateDTO updateClient){
-        Client client = getClientById(updateClient.id());
+        Client client = getClientByEmail(updateClient.email());
         client.setPassword(updateClient.password());
         clientRepository.save(client);
         return Response.successful("Updated");
     }
-    public Client getClientById(long id){
-        return clientRepository.findById(id).orElseThrow(() -> new NotFoundException("Client with id " + id));
+    public Client getClientByEmail(String email){
+        return clientRepository.findClientByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
 }

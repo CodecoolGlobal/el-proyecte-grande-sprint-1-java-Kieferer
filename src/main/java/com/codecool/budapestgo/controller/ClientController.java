@@ -4,7 +4,7 @@ import com.codecool.budapestgo.controller.dto.client.ClientDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
 import com.codecool.budapestgo.service.ClientService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +21,9 @@ public class ClientController {
         return clientService.getAllClient();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClientById(@Valid @PathVariable @Min(1) Long id) {
-       return clientService.deleteClientById(id);
+    @DeleteMapping("/{email}")
+    public ResponseEntity<String> deleteClientById(@Valid @PathVariable @NotBlank String email) {
+       return clientService.deleteClientByEmail(email);
     }
 
     @PutMapping
