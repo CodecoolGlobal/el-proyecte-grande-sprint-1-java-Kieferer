@@ -11,12 +11,7 @@ import lombok.*;
 @Entity
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(
-            name = "schedule_seq",
-            sequenceName = "schedule_seq",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

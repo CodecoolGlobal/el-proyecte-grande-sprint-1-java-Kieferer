@@ -5,7 +5,7 @@ import com.codecool.budapestgo.controller.dto.pass.PurchasedPassResponseDTO;
 import com.codecool.budapestgo.service.PurchasedPassService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pass")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PurchasedPassController {
     private final PurchasedPassService purchasedPassService;
-
     @GetMapping("/all")
     public List<PurchasedPassResponseDTO> getAllPass(){
         return purchasedPassService.getAllPass();
@@ -33,11 +32,11 @@ public class PurchasedPassController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerPass(@Valid @RequestBody PassDTO passDTO){
-                return purchasedPassService.addPass(passDTO);
+       return purchasedPassService.addPass(passDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAllPassOfClient(@Valid @PathVariable @Min(1) Long id){
-       return purchasedPassService.deletePassesByClientId(id);
+      return purchasedPassService.deletePassesByClientId(id);
     }
 }

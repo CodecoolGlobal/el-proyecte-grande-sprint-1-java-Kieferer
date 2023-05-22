@@ -6,21 +6,15 @@ import lombok.*;
 @Entity
 @Getter
 @Builder
-@NonNull
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 public class PassCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(
-            name = "pass_seq",
-            sequenceName = "pass_seq",
-            allocationSize = 1
-    )
-    private Long id;
-    private final String passDuration;
-    private final long passExpireInDay;
-    private final String category;
-    private final int price;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private final Long id;
+    @NonNull private final String passDuration;
+    @NonNull private final Long passExpireInDay;
+    @NonNull private final String category;
+    @NonNull private final Integer price;
 
 }

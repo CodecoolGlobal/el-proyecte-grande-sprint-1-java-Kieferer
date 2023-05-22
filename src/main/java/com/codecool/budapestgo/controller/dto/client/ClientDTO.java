@@ -8,6 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record ClientDTO(@NotNull @Min(1) Long id, @Email String email, @NotNull @NotBlank String clientCategoryType) {
     public static ClientDTO of(Client client) {
-        return new ClientDTO(client.getId(),client.getEmail(), client.getType().name());
+        return new ClientDTO(client.getId(),client.getEmail(), client.getRole().name());
     }
 }
