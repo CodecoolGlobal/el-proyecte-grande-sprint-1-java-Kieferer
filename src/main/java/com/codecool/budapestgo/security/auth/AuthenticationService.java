@@ -51,7 +51,6 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(additionalClaims,client);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .id(client.getId())
                 .build();
         }catch (Exception e){
             throw new InvalidLoginException();
