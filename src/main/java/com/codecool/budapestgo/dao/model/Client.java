@@ -1,12 +1,15 @@
 package com.codecool.budapestgo.dao.model;
 
 import com.codecool.budapestgo.dao.types.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Builder
@@ -25,6 +28,17 @@ public class Client implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PurchasedPass> purchasedPass = new ArrayList<>();
+    public void addPurchasedPass(PurchasedPass pass) {
+        purchasedPass.add(pass);
+        pass.setClient(this);
+    }
+    public void removePurchasedPass(PurchasedPass pass) {
+        purchasedPass.remove(pass);
+        pass.setClient(null);
+    }
     public void setPassword(@NonNull String password) {
         this.password = password;
     }
