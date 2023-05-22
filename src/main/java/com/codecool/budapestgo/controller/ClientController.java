@@ -22,7 +22,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<String> deleteClientById(@Valid @PathVariable @NotBlank String email) {
+    public ResponseEntity<String> deleteClientByEmail(@Valid @PathVariable @NotBlank String email) {
        return clientService.deleteClientByEmail(email);
     }
 

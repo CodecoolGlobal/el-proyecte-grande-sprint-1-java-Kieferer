@@ -23,8 +23,8 @@ public class ClientService {
                 .toList();
     }
     public ResponseEntity<String> deleteClientByEmail(String email){
-        getClientByEmail(email);
-        clientRepository.deleteByEmail(email);
+        Client client = getClientByEmail(email);
+        clientRepository.deleteById(client.getId());
         return Response.successful("Deleted");
     }
 
