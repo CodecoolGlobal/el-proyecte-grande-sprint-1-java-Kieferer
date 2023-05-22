@@ -45,6 +45,10 @@ public class PassCategoryService {
 
         return Response.successful("Updated");
     }
+    public PassCategory getPassCategoryByNameAndDuration(String passCategory, String passDuration){
+        return  passCategoryRepository.findByCategoryAndPassDuration(passCategory, passDuration)
+                .orElseThrow(() -> new NotFoundException("Pass category "));
+    }
     private void checkCategoryExistenceById(Long id){
         passCategoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Pass category with id " + id));
     }
@@ -52,9 +56,5 @@ public class PassCategoryService {
         if (passCategoryRepository.findByCategoryAndPassDuration(passCategoryRegisterDTO.category(), passCategoryRegisterDTO.passDuration()).isPresent()) {
             throw new DataIntegrityViolationException("Category already exist");
         }
-    }
-    public PassCategory getPassCategoryByNameAndDuration(String passCategory, String passDuration){
-        return  passCategoryRepository.findByCategoryAndPassDuration(passCategory, passDuration)
-                .orElseThrow(() -> new NotFoundException("Pass category "));
     }
 }
