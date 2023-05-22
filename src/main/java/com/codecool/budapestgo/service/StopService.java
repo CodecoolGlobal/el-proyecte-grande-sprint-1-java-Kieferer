@@ -10,6 +10,7 @@ import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
 import com.codecool.budapestgo.utils.DtoMapper;
 import com.codecool.budapestgo.utils.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StopService {
     private final StopRepository stopRepository;
-
-    public StopService(StopRepository stopRepository) {
-        this.stopRepository = stopRepository;
-    }
 
     public List<StopDTO> getAllStops() {
         return stopRepository.findAll()
@@ -62,7 +60,7 @@ public class StopService {
     private void checkStopExistenceById(long id){
         stopRepository.getStopById(id).orElseThrow(() -> new NotFoundException("Stop with id " + id));
     }
-    private Stop getStopById(long id){
+    public Stop getStopById(long id){
         return stopRepository.getStopById(id).orElseThrow(() -> new NotFoundException("Stop with " + id));
     }
 }

@@ -7,6 +7,7 @@ import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RouteService {
     private final RouteRepository routeRepository;
-
-    public RouteService(RouteRepository routeRepository) {
-        this.routeRepository = routeRepository;
-    }
 
     public List<RouteDTO> getAllRoutes() {
         return routeRepository.findAll().stream().map(RouteDTO::of).toList();
@@ -63,5 +61,8 @@ public class RouteService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Routes couldn't be deleted");
         }
+    }
+    public Route getRouteById(long id){
+      return routeRepository.getRouteById(id).orElseThrow(() -> new NotFoundException("Route with ID " + id));
     }
 }

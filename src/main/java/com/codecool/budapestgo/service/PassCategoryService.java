@@ -53,4 +53,8 @@ public class PassCategoryService {
             throw new DataIntegrityViolationException("Category already exist");
         }
     }
+    public PassCategory getPassCategoryByNameAndDuration(String passCategory, String passDuration){
+        return  passCategoryRepository.findByCategoryAndPassDuration(passCategory, passDuration)
+                .orElseThrow(() -> new NotFoundException("Pass category "));
+    }
 }

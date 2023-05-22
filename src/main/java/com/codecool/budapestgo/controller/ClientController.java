@@ -5,6 +5,7 @@ import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
 import com.codecool.budapestgo.service.ClientService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/client")
+@RequiredArgsConstructor
 public class ClientController {
     private final ClientService clientService;
-
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
-
     @GetMapping("/all")
     public List<ClientDTO> getAllClient() {
         return clientService.getAllClient();
