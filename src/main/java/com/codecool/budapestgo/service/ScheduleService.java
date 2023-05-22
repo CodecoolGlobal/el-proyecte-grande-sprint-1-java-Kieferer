@@ -1,34 +1,28 @@
 package com.codecool.budapestgo.service;
+
 import com.codecool.budapestgo.controller.dto.schedule.ScheduleDTO;
-import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
-import com.codecool.budapestgo.dao.repository.RouteRepository;
 import com.codecool.budapestgo.dao.model.Schedule;
-import com.codecool.budapestgo.dao.repository.ScheduleRepository;
 import com.codecool.budapestgo.dao.model.Stop;
-import com.codecool.budapestgo.dao.repository.StopRepository;
-import org.springframework.http.ResponseEntity;
+import com.codecool.budapestgo.dao.repository.ScheduleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
-    RouteRepository routeRepository;
-    StopRepository stopRepository;
-    ScheduleRepository scheduleRepository;
-
-    public ScheduleService(RouteRepository routeRepository, StopRepository stopRepository, ScheduleRepository scheduleRepository) {
-        this.routeRepository = routeRepository;
-        this.stopRepository = stopRepository;
-        this.scheduleRepository = scheduleRepository;
-    }
+    private final ScheduleRepository scheduleRepository;
+    private final RouteService routeService;
+    private final StopService stopService;
 
     public ResponseEntity<String> addSchedule(ScheduleDTO scheduleDTO){
-        Route route = routeRepository.getRouteById(scheduleDTO.routeId()).orElseThrow(() -> new NotFoundException("Route with ID " + scheduleDTO.routeId()));
-        Stop stop = stopRepository.getStopById(scheduleDTO.stopId()).orElseThrow(() -> new NotFoundException("Stop with ID " + scheduleDTO.stopId()));
-
+        Route route = routeService.getRouteById(scheduleDTO.routeId());
+        Stop stop = stopService.getStopById(scheduleDTO.stopId());
 
         Schedule routeSchedule = Schedule.builder()
                 .route(route)

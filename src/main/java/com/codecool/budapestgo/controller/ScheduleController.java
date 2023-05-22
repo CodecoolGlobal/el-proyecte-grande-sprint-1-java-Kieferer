@@ -7,6 +7,7 @@ import com.codecool.budapestgo.service.ScheduleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/schedule")
+@RequiredArgsConstructor
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
     @PostMapping("/add")
     public ResponseEntity<String> addSchedule(@Valid @RequestBody ScheduleDTO scheduleDTO){
                 return scheduleService.addSchedule(scheduleDTO);

@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PurchasedPassController {
     private final PurchasedPassService purchasedPassService;
-
     @GetMapping("/all")
     public List<PurchasedPassResponseDTO> getAllPass(){
         return purchasedPassService.getAllPass();

@@ -5,7 +5,7 @@ import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
 import com.codecool.budapestgo.service.PassCategoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PassCategoryController {
     private final PassCategoryService passCategoryService;
     @GetMapping("/all")
