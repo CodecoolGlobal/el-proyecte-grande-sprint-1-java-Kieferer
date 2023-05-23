@@ -1,5 +1,6 @@
 package com.codecool.budapestgo.dao.model;
 
+import com.codecool.budapestgo.dao.types.TransporterCategoryType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +19,9 @@ public class Route {
     private final Long id;
     @NonNull
     private final String name;
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    private TransporterCategoryType categoryType;
     @JsonIgnore
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules = new ArrayList<>();
