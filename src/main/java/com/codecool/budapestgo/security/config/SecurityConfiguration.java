@@ -1,6 +1,6 @@
 package com.codecool.budapestgo.security.config;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -13,21 +13,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static com.codecool.budapestgo.dao.types.Role.*;
 
 @Configuration
-@EnableWebSecurity
-@RequiredArgsConstructor
+@EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.authenticationProvider = authenticationProvider;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/",
-                                 "/index.html",
+                .requestMatchers(
                                  "/register",
-                                 "/authenticate"
+                                 "/authenticate",
+                                "/frontend/**"
                                 ).permitAll()
                 .requestMatchers("/client/**",
                         "/pass/**",
