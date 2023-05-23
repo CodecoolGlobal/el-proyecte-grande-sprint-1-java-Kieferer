@@ -32,7 +32,16 @@ public class SecurityConfiguration {
                 .requestMatchers(
                                  "/register",
                                  "/authenticate",
-                                "/frontend/**"
+
+                                "/",
+                                "/frontend/index",
+                                "/index.html",
+                                "/static/**",
+                                "/*.ico",
+                                "/*.json",
+                                "/*.png",
+                                "/frontend/**",
+                                "/home"
                                 ).permitAll()
                 .requestMatchers("/client/**",
                         "/pass/**",
