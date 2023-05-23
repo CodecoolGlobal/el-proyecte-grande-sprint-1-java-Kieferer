@@ -15,4 +15,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   web:
     resources:
-      static-locations: classpath:/frontend/static/
+      static-locations: classpath:/frontend/
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
