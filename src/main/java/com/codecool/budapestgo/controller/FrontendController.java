@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class FrontendController {
-    @GetMapping({"/index"})
+    @GetMapping({"/"})
     public String index() {
-        return "index";
+        return "/index.html";
     }
 }
