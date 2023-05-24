@@ -27,29 +27,31 @@ public class PurchasedPassService {
                 .map(PurchasedPassResponseDTO::of)
                 .toList();
     }
-    public List<PurchasedPassResponseDTO> getExpiredPasses(Long id){
-        return purchasedPassRepository.getAllExpiredPassesByClient_id(id)
+    public List<PurchasedPassResponseDTO> getExpiredPasses(String email){
+        return purchasedPassRepository.getAllExpiredPassesByClient(email)
                 .stream()
                 .map(PurchasedPassResponseDTO::of)
                 .toList();
     }
-    public List<PurchasedPassResponseDTO> getActivePasses(Long id){
-        return purchasedPassRepository.getActivePassesByClient_id(id)
+    public List<PurchasedPassResponseDTO> getActivePasses(String email){
+        return purchasedPassRepository.getActivePassesByClient(email)
                 .stream()
                 .map(PurchasedPassResponseDTO::of)
                 .toList();
     }
     public ResponseEntity<String> addPass(PassDTO passDTO){
-        Client client = clientService.getClientById(passDTO.clientId());
+        Client client = clientService.getClientByEmail(passDTO.email());
         PassCategory pass = passCategoryService.getPassCategoryByNameAndDuration(passDTO.passCategory(), passDTO.passDuration());
         PurchasedPass purchasedPass = DtoMapper.toEntity(client, pass);
 
+        client.addPurchasedPass(purchasedPass);
         purchasedPassRepository.save(purchasedPass);
         return Response.successful("Purchased");
     }
-    public ResponseEntity<String> deletePassesByClientId(Long id){
-        clientService.getClientById(id);
-        purchasedPassRepository.deleteAllByClient_Id(id);
+    public ResponseEntity<String> deletePassesByClientEmail(String email){
+        purchasedPassRepository.findAllByByClient(email)
+                .forEach(purchasedPass -> purchasedPass.getClient().removePurchasedPass(purchasedPass));
+        purchasedPassRepository.deleteAllByClient_Email(email);
         return Response.successful("Passes of client deleted");
     }
 }

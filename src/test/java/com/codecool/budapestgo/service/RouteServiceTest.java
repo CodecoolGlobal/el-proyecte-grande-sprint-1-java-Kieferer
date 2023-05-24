@@ -5,6 +5,7 @@ import com.codecool.budapestgo.controller.dto.route.RouteDTO;
 import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
+import com.codecool.budapestgo.dao.types.TransporterCategoryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -35,8 +36,8 @@ class RouteServiceTest {
     @Test
     void testGetAllRoute() {
         List<Route> routes = new ArrayList<>();
-        Route routeOne = new Route(1L,"9");
-        Route routeTwo = new Route(2L,"M3");
+        Route routeOne = new Route(1L,"9",TransporterCategoryType.BUS);
+        Route routeTwo = new Route(2L,"M3",TransporterCategoryType.BUS);
         routes.add(routeOne);
         routes.add(routeTwo);
         when(routeRepository.findAll()).thenReturn(routes);
@@ -60,7 +61,7 @@ class RouteServiceTest {
 
     @Test
     void testAddRoute() {
-        NewRouteDTO newRouteDTO = new NewRouteDTO("9");
+        NewRouteDTO newRouteDTO = new NewRouteDTO("9","BUS");
         routeService.addRoute(newRouteDTO);
 
         verify(routeRepository, times(1)).save(argThat(route -> route.getName().equals(newRouteDTO.name())));
@@ -70,8 +71,9 @@ class RouteServiceTest {
     void testUpdateRouteWhenRouteExist() {
         Long id = 1L;
         String newName= "Updated Route";
-        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,newName);
-        Route route = new Route(id,"Old Route");
+        TransporterCategoryType categoryType = TransporterCategoryType.BUS;
+        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,newName,categoryType.toString());
+        Route route = new Route(id,"Old Route", TransporterCategoryType.BUS);
         when(routeRepository.findById(id)).thenReturn(Optional.of(route));
         when(routeRepository.save(route)).thenReturn(route);
 
@@ -85,7 +87,7 @@ class RouteServiceTest {
     @Test
     void testUpdateRouteWhenRouteNotExist() {
         Long id = 1L;
-        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,"9");
+        UpdateRouteDTO updateRouteDTO = new UpdateRouteDTO(id,"9","BUS");
         when(routeRepository.findById(id)).thenReturn(Optional.empty());
 
         ResponseEntity<String> response = routeService.updateRoute(updateRouteDTO);
