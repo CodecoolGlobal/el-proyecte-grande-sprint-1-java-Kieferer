@@ -1,5 +1,6 @@
 package com.codecool.budapestgo.dao.model;
 
+import com.codecool.budapestgo.dao.types.Provider;
 import com.codecool.budapestgo.dao.types.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,9 @@ public class Client implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     public void setPassword(@NonNull String password) {
         this.password = password;
