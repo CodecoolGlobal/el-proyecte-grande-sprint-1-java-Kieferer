@@ -1,13 +1,11 @@
 package com.codecool.budapestgo.utils;
 
+import com.codecool.budapestgo.controller.dto.news.NewsDTO;
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryRegisterDTO;
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
 import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
-import com.codecool.budapestgo.dao.model.Client;
-import com.codecool.budapestgo.dao.model.PassCategory;
-import com.codecool.budapestgo.dao.model.PurchasedPass;
-import com.codecool.budapestgo.dao.model.Stop;
+import com.codecool.budapestgo.dao.model.*;
 import com.codecool.budapestgo.dao.types.Role;
 import com.codecool.budapestgo.data.Point;
 import com.codecool.budapestgo.security.auth.RegisterRequest;
@@ -22,6 +20,15 @@ public class DtoMapper {
                 .role(Role.CUSTOMER)
                 .build();
     }
+    public static News toEntity(NewsDTO newsDTO){
+        return News.builder()
+                .imgData(newsDTO.imgData())
+                .title(newsDTO.title())
+                .description(newsDTO.description())
+                .articleText(newsDTO.articleText())
+                .build();
+    }
+
     public static Stop toEntity(NewStopDTO newStopDTO){
         return Stop.builder()
                 .name(newStopDTO.name())
