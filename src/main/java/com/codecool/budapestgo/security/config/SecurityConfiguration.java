@@ -26,7 +26,15 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/",
                                  "/register",
-                                 "/authenticate"
+                                 "/authenticate",
+                                "/frontend/index",
+                                "/index.html",
+                                "/static/**",
+                                "/*.ico",
+                                "/*.json",
+                                "/*.png",
+                                "/frontend/**",
+                                "/home"
                                 ).permitAll()
                 .requestMatchers("/client/**",
                         "/pass/**",
