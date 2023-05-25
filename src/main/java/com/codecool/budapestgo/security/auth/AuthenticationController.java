@@ -7,10 +7,14 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
 public class AuthenticationController {
+    private String state;
     private final AuthenticationService service;
     private final ClientRegistrationRepository clientRegistrationRepository;
 
@@ -35,7 +39,7 @@ public class AuthenticationController {
             String clientId = clientRegistration.getClientId();
             String redirectUri ="http://localhost:8080/login/oauth2/code/";
             String scope = String.join(" ", clientRegistration.getScopes());
-            String state = "xyz123"; // Generate and store a unique state value for CSRF protection
+            String state = generateState();
 
             String authorizationUrl = String.format("%s?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&state=%s",
                     authorizationUri, clientId, redirectUri, scope, state);
@@ -43,14 +47,25 @@ public class AuthenticationController {
             return authorizationUrl;
         }
 
-        // Handle error: Unable to find Google client registration
 
         return null;
     }
 
-    @GetMapping("/login/oauth2/code/{registrationId}")
-    public void handleOauth2Redirect(@PathVariable String registrationId){
-        System.out.println(registrationId);
+    @GetMapping("login/oauth2/code/{registrationId}")
+    public void handleOauth2Redirect(@PathVariable String registrationId,@RequestParam String state){
+        if (state.equals(this.state)) {
+            System.out.println(state);
+            System.out.println(registrationId);
+        } else {
+            System.out.println("Invalid state");
+        }
     }
+
+    private String generateState() {
+        String state = new BigInteger(130, new SecureRandom()).toString(32);
+        this.state = state;
+        return state;
+    }
+
 
 }
