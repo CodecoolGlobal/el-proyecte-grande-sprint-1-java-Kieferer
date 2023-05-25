@@ -1,72 +1,66 @@
 package com.codecool.budapestgo.service;
 
 
+import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
-import com.codecool.budapestgo.dao.model.stop.Point;
-import com.codecool.budapestgo.dao.model.stop.Stop;
-import com.codecool.budapestgo.dao.model.stop.StopRepository;
-import org.springframework.http.HttpStatus;
+import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
+import com.codecool.budapestgo.dao.model.Schedule;
+import com.codecool.budapestgo.dao.model.Stop;
+import com.codecool.budapestgo.dao.repository.StopRepository;
+import com.codecool.budapestgo.utils.DtoMapper;
+import com.codecool.budapestgo.utils.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class StopService {
     private final StopRepository stopRepository;
 
-    public StopService(StopRepository stopRepository) {
-        this.stopRepository = stopRepository;
-    }
-    public boolean existsByName(String name) {
-        return stopRepository.getStopByName(name).isPresent();
-    }
     public List<StopDTO> getAllStops() {
         return stopRepository.findAll()
                 .stream()
-                .map(stop -> new StopDTO(stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude()))
+                .map(stop -> new StopDTO(stop.getId(), stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude()))
                 .toList();
     }
 
-    public ResponseEntity<StopDTO> getStopById(Integer id) {
-        return stopRepository.findById(id)
-                .stream()
-                .map(stop ->  ResponseEntity.ok(new StopDTO(stop.getName(),stop.getLocation().getLatitude(),stop.getLocation().getLongitude())))
-                .findFirst()
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<String> deleteStopById(Long id) {
+        checkStopExistenceById(id);
+        stopRepository.deleteById(id);
+        return Response.successful("Deleted");
     }
 
-    public ResponseEntity<String> deleteStopById(Integer id) {
-        if(stopRepository.existsById(id)) {
-            stopRepository.deleteById(id);
-            return ResponseEntity.ok("Stop deleted.");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Stop not found.");
-    }
-
-    public ResponseEntity<String> addStop(StopDTO stopDTO) {
-        if(!existsByName(stopDTO.name())) {
-            Stop stop = Stop.builder()
-                    .name(stopDTO.name())
-                    .location(new Point(stopDTO.latitude(), stopDTO.longitude()))
-                    .build();
+    public ResponseEntity<String> addStop(NewStopDTO newStopDTO) {
+            Stop stop = DtoMapper.toEntity(newStopDTO);
             stopRepository.save(stop);
-            return ResponseEntity.ok("Stop created");
-        }
-        return ResponseEntity.badRequest()
-                .body("Stop already exist.");
+            return Response.created("Stop");
     }
 
-    public ResponseEntity<String> updateStop(StopDTO stopDTO) {
-        Optional<Stop> stop = stopRepository.getStopByName(stopDTO.name());
-        if (stop.isPresent()) {
-            stop.get().setLocation(new Point(stopDTO.latitude(),stopDTO.longitude()));
-            stopRepository.save(stop.get());
-            return ResponseEntity.ok("Stop updated");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Stop not found");
+    public ResponseEntity<String> updateStop(UpdateStopDTO updateStopDTO) {
+        Stop stop = getStopById(updateStopDTO.id());
+        List<Schedule> schedules = new ArrayList<>(stop.getSchedules());
+        schedules.forEach(stop::removeSchedule);
+
+        Stop updatedStop = DtoMapper.toEntity(updateStopDTO);
+        schedules.forEach(updatedStop::addSchedule);
+
+        stopRepository.save(updatedStop);
+        return Response.successful("Stops updated");
+    }
+
+    public ResponseEntity<String> deleteAllStops() {
+            stopRepository.deleteAll();
+            return Response.successful("Stops deleted");
+    }
+    private void checkStopExistenceById(long id){
+        stopRepository.getStopById(id).orElseThrow(() -> new NotFoundException("Stop with id " + id));
+    }
+    public Stop getStopById(long id){
+        return stopRepository.getStopById(id).orElseThrow(() -> new NotFoundException("Stop with " + id));
     }
 }

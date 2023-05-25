@@ -1,74 +1,40 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.client.ClientDTO;
-import com.codecool.budapestgo.controller.dto.client.ClientRegisterDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
-import com.codecool.budapestgo.dao.model.client.Client;
-import com.codecool.budapestgo.dao.model.client.ClientRepository;
-import com.codecool.budapestgo.data.ClientCategoryType;
-import org.springframework.http.HttpStatus;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
+import com.codecool.budapestgo.dao.model.Client;
+import com.codecool.budapestgo.dao.repository.ClientRepository;
+import com.codecool.budapestgo.utils.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
-
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
     public List<ClientDTO> getAllClient(){
         return clientRepository.findAll()
                 .stream()
                 .map(ClientDTO::of)
                 .toList();
     }
-    public ResponseEntity<ClientDTO> getClientById(Integer id){
-        return clientRepository.findById(id)
-                .map(client ->  ResponseEntity.ok(ClientDTO.of(client)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-    public void deleteClientById(Integer id){
-        clientRepository.deleteById(id);
-    }
-    public ResponseEntity<String> addClient(ClientRegisterDTO clientToRegister){
-        Optional<Client> searchedClient = clientRepository.findClientByEmail(clientToRegister.email());
-        if(searchedClient.isEmpty()) {
-            Client client = Client.builder()
-                    .email(clientToRegister.email())
-                    .password(clientToRegister.password())
-                    .type(ClientCategoryType.CUSTOMER)
-                    .build();
-            clientRepository.save(client);
-            return ResponseEntity.ok("User created");
-        }
-        return ResponseEntity.badRequest().body("User with that email already exist.");
-    }
-    public ResponseEntity<String> updateClient(ClientUpdateDTO updateClient){
-        Optional<Client> client = clientRepository.findById(updateClient.id());
-        if(client.isPresent()) {
-            client.get().setPassword(updateClient.password());
-            clientRepository.save(client.get());
-            return ResponseEntity.ok("Client updated");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+    public ResponseEntity<String> deleteClientByEmail(String email){
+        Client client = getClientByEmail(email);
+        clientRepository.deleteById(client.getId());
+        return Response.successful("Deleted");
     }
 
-    public Client login(String email, String password) {
-        Optional<Client> client = clientRepository.findClientByEmail(email);
-        if (client.isPresent()){
-            if (client.get().getPassword().equals(password))
-                return client.get();
-            else
-                //TODO: costume exception for bad password
-                throw new RuntimeException();
-        }
-        else
-            //TODO: costume exception for bad email
-            throw new NoSuchElementException();
+    public ResponseEntity<String> updateClient(ClientUpdateDTO updateClient){
+        Client client = getClientByEmail(updateClient.email());
+        client.setPassword(updateClient.password());
+        clientRepository.save(client);
+        return Response.successful("Updated");
+    }
+    public Client getClientByEmail(String email){
+        return clientRepository.findClientByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
 }

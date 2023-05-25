@@ -4,6 +4,9 @@ import com.codecool.budapestgo.controller.dto.route.NewRouteDTO;
 import com.codecool.budapestgo.controller.dto.route.RouteDTO;
 import com.codecool.budapestgo.controller.dto.route.UpdateRouteDTO;
 import com.codecool.budapestgo.service.RouteService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/route")
+@RequiredArgsConstructor
 public class RouteController {
     private final RouteService routeService;
-
-    public RouteController(RouteService routeService) {
-        this.routeService = routeService;
+    @PutMapping("/update")
+    public ResponseEntity<String> updateRoute(@Valid @RequestBody UpdateRouteDTO updateRouteDTO){
+        return routeService.updateRoute(updateRouteDTO);
     }
 
     @GetMapping("/all")
@@ -24,17 +28,17 @@ public class RouteController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRoute(@PathVariable int id){
+    public void deleteRoute(@Valid @PathVariable @Min(1) Long id){
         routeService.deleteRoute(id);
     }
 
     @PostMapping("/add")
-    public void addRoute(@RequestBody NewRouteDTO newRoute){
-        routeService.addRoute(newRoute);
+    public ResponseEntity<String> addRoute(@Valid @RequestBody NewRouteDTO newRoute) {
+                return routeService.addRoute(newRoute);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<String> updateRoute(@RequestBody UpdateRouteDTO newRouteDTO){
-        return routeService.updateRoute(newRouteDTO);
+    @DeleteMapping("/all")
+    public ResponseEntity<String> deleteAllRoutes(){
+        return  routeService.deleteAllRoutes();
     }
 }
