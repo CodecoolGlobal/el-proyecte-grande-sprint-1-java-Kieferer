@@ -16,16 +16,6 @@ spring:
   web:
     resources:
       static-locations: classpath:/frontend/
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: 65474723555-d7cch1n8uu1c397gkipr0v93b7neeikg.apps.googleusercontent.com
-            clientSecret: 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
-            scope:
-              - email
-              - profile
 logging:
   level:
     org:
