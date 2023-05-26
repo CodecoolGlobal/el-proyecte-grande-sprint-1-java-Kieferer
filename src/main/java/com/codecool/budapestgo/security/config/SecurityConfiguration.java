@@ -29,11 +29,9 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers(
+                .requestMatchers("/",
                                  "/register",
                                  "/authenticate",
-
-                                "/",
                                 "/frontend/index",
                                 "/index.html",
                                 "/static/**",
@@ -41,7 +39,8 @@ public class SecurityConfiguration {
                                 "/*.json",
                                 "/*.png",
                                 "/frontend/**",
-                                "/home"
+                                "/home",
+                                 "/authenticate"
                                 ).permitAll()
                 .requestMatchers("/client/**",
                         "/pass/**",
