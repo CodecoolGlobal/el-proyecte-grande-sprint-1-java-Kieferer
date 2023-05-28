@@ -3,7 +3,7 @@ package com.codecool.budapestgo.controller;
 import com.codecool.budapestgo.controller.dto.news.NewsDTO;
 import com.codecool.budapestgo.service.NewsService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,12 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/news/api")
+@RequiredArgsConstructor
 public class NewsController {
     private final NewsService newsService;
-    @Autowired
-    public NewsController(NewsService newsService) {
-        this.newsService = newsService;
-    }
     @GetMapping("/all")
     public List<NewsDTO> getAllNews(){
         return newsService.getAllNews();

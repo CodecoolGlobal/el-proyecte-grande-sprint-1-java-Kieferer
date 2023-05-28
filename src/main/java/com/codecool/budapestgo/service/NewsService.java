@@ -6,7 +6,7 @@ import com.codecool.budapestgo.dao.model.News;
 import com.codecool.budapestgo.dao.repository.NewsRepository;
 import com.codecool.budapestgo.utils.DtoMapper;
 import com.codecool.budapestgo.utils.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NewsService {
     private final NewsRepository newsRepository;
-    @Autowired
-    public NewsService(NewsRepository newsRepository) {
-        this.newsRepository = newsRepository;
-    }
-
     public List<NewsDTO> getAllNews(){
         return newsRepository.findAll().stream().map(NewsDTO::of).toList();
     }

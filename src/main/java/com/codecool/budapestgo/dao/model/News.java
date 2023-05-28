@@ -12,9 +12,7 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
-    //@Lob
     private byte[] imgData;
-
     @NonNull private final String title;
     @NonNull private final String description;
     @NonNull private final String articleText;
