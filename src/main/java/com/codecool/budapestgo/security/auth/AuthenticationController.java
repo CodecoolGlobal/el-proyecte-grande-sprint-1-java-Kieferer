@@ -75,7 +75,7 @@ public class AuthenticationController {
             // Make the POST request to the token endpoint
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<TokenResponse> responseEntity = restTemplate.exchange(
-                    "https://oauth2.googleapis.com/token",
+                    "https://www.googleapis.com/oauth2/v4/token",
                     HttpMethod.POST,
                     requestEntity,
                     TokenResponse.class
