@@ -1,5 +1,6 @@
 package com.codecool.budapestgo.dao.model;
 
+import com.codecool.budapestgo.dao.types.Provider;
 import com.codecool.budapestgo.dao.types.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -39,6 +40,9 @@ public class Client implements UserDetails {
         purchasedPass.remove(pass);
         pass.setClient(null);
     }
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     public void setPassword(@NonNull String password) {
         this.password = password;
     }
