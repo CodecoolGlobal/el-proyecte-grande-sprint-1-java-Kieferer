@@ -1,5 +1,5 @@
 @echo off
-set frontendPath=C:\Kieferer\Kieferer\budapestGo2-frontend
+set frontendPath=${ROOT_FRONTEND}
 set frontendBuildPath=%frontendPath%\budapest-go-2-frontend\build
 set backendAutomationPath=%~dp0
 
