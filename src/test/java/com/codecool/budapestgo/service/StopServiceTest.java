@@ -1,11 +1,13 @@
 package com.codecool.budapestgo.service;
 
+import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
 import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
 import com.codecool.budapestgo.data.Point;
+import com.codecool.budapestgo.utils.DtoMapper;
 import com.codecool.budapestgo.utils.Response;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
@@ -82,7 +84,7 @@ class StopServiceTest {
 
     @Test
     void testDeleteStopByIdWhenExists() {
-        Long id= 1L;
+        Long id = 1L;
         Stop stop = buildStop(id, "Stop", new Point(1.0, 2.0));
         when(stopRepository.getStopById(id)).thenReturn(Optional.ofNullable(stop));
 
@@ -92,42 +94,41 @@ class StopServiceTest {
         verify(stopRepository, times(1)).deleteById(id);
     }
 
-        @Test
-        void testDeleteStopByIdWhenNotExists() {
-            when(stopRepository.getStopById(anyLong())).thenReturn(Optional.empty());
+    @Test
+    void testDeleteStopByIdWhenNotExists() {
+        when(stopRepository.getStopById(anyLong())).thenReturn(Optional.empty());
 
-            assertThrows(NotFoundException.class,()-> stopService.deleteStopById(1L));
-            verify(stopRepository, never()).deleteById(anyLong());
-        }
+        assertThrows(NotFoundException.class, () -> stopService.deleteStopById(1L));
+        verify(stopRepository, never()).deleteById(anyLong());
+    }
+    @Test
+    void testAddStop() {
+        NewStopDTO stopDTO = new NewStopDTO("Stop",1.0,2.0);
+        Stop stop = DtoMapper.toEntity(stopDTO);
+        when(stopRepository.save(any(Stop.class))).thenReturn(stop);
+
+        ResponseEntity<String> response = stopService.addStop(stopDTO);
+
+        assertEquals("Stop created successfully", response.getBody());
+        verify(stopRepository, times(1)).save(any(Stop.class));
+    }
 
     /*
-        @Test
-        void testAddStopWhenNotExists() {
-            StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
-            when(stopRepository.getStopByName(stopDTO.name())).thenReturn(Optional.empty());
 
-            ResponseEntity<String> response = stopService.addStop(stopDTO);
+@Test
+    void testAddStopWhenNotExists() {
+        StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
+        when(stopRepository.getStopByName(stopDTO.name())).thenReturn(Optional.empty());
 
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals("Stop created", response.getBody());
-            verify(stopRepository, times(1)).save(argThat(stop ->
-                    stop.getName().equals(stopDTO.name()) &&
-                            stop.getLocation().getLatitude() == stopDTO.latitude() &&
-                            stop.getLocation().getLongitude() == stopDTO.longitude()));
-        }
+        ResponseEntity<String> response = stopService.addStop(stopDTO);
 
-        @Test
-        void testAddStopWhenExists() {
-            StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
-            when(stopRepository.getStopByName(stopDTO.name())).thenReturn(Optional.of(new Stop()));
-
-            ResponseEntity<String> response = stopService.addStop(stopDTO);
-
-            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-            assertEquals("Stop already exist.", response.getBody());
-            verify(stopRepository, never()).save(any(Stop.class));
-        }
-
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Stop created", response.getBody());
+        verify(stopRepository, times(1)).save(argThat(stop ->
+                stop.getName().equals(stopDTO.name()) &&
+                        stop.getLocation().getLatitude() == stopDTO.latitude() &&
+                        stop.getLocation().getLongitude() == stopDTO.longitude()));
+    }
         @Test
         void testUpdateStopWhenStopExists() {
             StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
