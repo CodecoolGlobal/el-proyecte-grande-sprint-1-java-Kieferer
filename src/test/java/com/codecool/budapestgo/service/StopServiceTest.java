@@ -6,6 +6,7 @@ import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.StopRepository;
 import com.codecool.budapestgo.data.Point;
+import com.codecool.budapestgo.utils.Response;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -50,6 +51,7 @@ class StopServiceTest {
             assertStopEquals(stops.get(i), stopDTOs.get(i));
         }
     }
+
     @Test
     void testGetAllStopsWhenHasNoStops() {
         List<Stop> stops = new ArrayList<>();
@@ -57,38 +59,40 @@ class StopServiceTest {
 
         List<StopDTO> stopDTOs = stopService.getAllStops();
 
-        assertEquals(stopDTOs.size(),0);
+        assertEquals(stopDTOs.size(), 0);
 
     }
+
     @Test
     void testGetStopByIdWhenFound() {
         Long id = 1L;
-        Stop stop = buildStop(id,"Stop", new Point(1.0,2.0));
+        Stop stop = buildStop(id, "Stop", new Point(1.0, 2.0));
         when(stopRepository.getStopById(id)).thenReturn(Optional.ofNullable(stop));
 
         Stop foundStop = stopService.getStopById(id);
 
-        assertEquals(foundStop,stop);
+        assertEquals(foundStop, stop);
     }
+
     @Test
     void testGetStopByIdWhenNotFound() {
         when(stopRepository.getStopById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class,()->stopService.getStopById(1L));
+        assertThrows(NotFoundException.class, () -> stopService.getStopById(1L));
+    }
+
+    @Test
+    void testDeleteStopByIdWhenExists() {
+        Long id= 1L;
+        Stop stop = buildStop(id, "Stop", new Point(1.0, 2.0));
+        when(stopRepository.getStopById(id)).thenReturn(Optional.ofNullable(stop));
+
+        ResponseEntity<String> response = stopService.deleteStopById(id);
+
+        assertEquals("Deleted successfully", response.getBody());
+        verify(stopRepository, times(1)).deleteById(id);
     }
 
     /*
-        @Test
-        void testDeleteStopByIdWhenExists() {
-            int id = 1;
-            when(stopRepository.existsById(id)).thenReturn(true);
-
-            ResponseEntity<String> response = stopService.deleteStopById(id);
-
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals("Stop deleted.", response.getBody());
-            verify(stopRepository, times(1)).deleteById(id);
-        }
-
         @Test
         void testDeleteStopByIdWhenNotExists() {
             int id = 1;
