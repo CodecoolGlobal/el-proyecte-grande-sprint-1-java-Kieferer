@@ -33,4 +33,9 @@ build/
 .vscode/
 
 ##Frontend
-src/main/resources/frontend/
+src/main/resources/frontend/*
+
+#Maven
+.mvn/*
+mvnw
+mvnw.cmd
