@@ -92,19 +92,15 @@ class StopServiceTest {
         verify(stopRepository, times(1)).deleteById(id);
     }
 
-    /*
         @Test
         void testDeleteStopByIdWhenNotExists() {
-            int id = 1;
-            when(stopRepository.existsById(id)).thenReturn(false);
+            when(stopRepository.getStopById(anyLong())).thenReturn(Optional.empty());
 
-            ResponseEntity<String> response = stopService.deleteStopById(id);
-
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            assertEquals("Stop not found.", response.getBody());
-            verify(stopRepository, never()).deleteById(anyInt());
+            assertThrows(NotFoundException.class,()-> stopService.deleteStopById(1L));
+            verify(stopRepository, never()).deleteById(anyLong());
         }
 
+    /*
         @Test
         void testAddStopWhenNotExists() {
             StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
