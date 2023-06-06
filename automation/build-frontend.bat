@@ -1,6 +1,6 @@
 @echo off
 set frontendPath=C:\Kieferer\Kieferer\budapestGo2-frontend
-set frontendBuildPath=%frontendPath%\build
+set frontendBuildPath=%frontendPath%\budapest-go-2-frontend\build
 set backendAutomationPath=%~dp0
 
 :Validate
@@ -27,7 +27,7 @@ IF "%frontendPath%"=="" (
         exit
     )
 )
-pause
+
 :Update
 echo - change cd to frontend folder
 cd %frontendPath%
@@ -40,11 +40,9 @@ git pull
 cd %frontendPath%\budapest-go-2-frontend
 call npm i
 call npm run build
-echo 1
-rd %backendResourcesFrontendPath%
-echo 2
-mkdir %backendResourcesFrontendPath%
-echo %frontendBuildPath%
-echo %backendResourcesFrontendPath%
-copy %frontendBuildPath% %backendResourcesFrontendPath%
-pause
+
+cd /d "%backendAutomationPath%\.."
+cd src\main\resources
+rmdir /s /q frontend
+mkdir frontend
+xcopy /E /I %frontendBuildPath% frontend
