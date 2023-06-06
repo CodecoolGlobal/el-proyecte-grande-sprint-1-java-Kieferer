@@ -26,9 +26,9 @@ public class NewsController {
     public ResponseEntity<String> registerNews(@Valid @RequestBody NewsDTO newsDTO){
         return newsService.addNews(newsDTO);
     }
-    @DeleteMapping("/{title}")
-    public ResponseEntity<String> deleteNewsByTitle(@PathVariable String title){
-        return newsService.deleteNews(title);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteNewsByTitle(@PathVariable long id){
+        return newsService.deleteNews(id);
     }
     @PutMapping
     public ResponseEntity<String> updateNewsByTitle(@Valid @RequestBody NewsDTO newsDTO){

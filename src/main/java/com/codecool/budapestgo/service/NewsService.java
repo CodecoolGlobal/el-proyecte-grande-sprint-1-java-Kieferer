@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,33 +25,39 @@ public class NewsService {
         return NewsDTO.of(newsRepository.findByTitle(title).orElseThrow(() -> new NotFoundException("News")));
     }
     public ResponseEntity<String> addNews(NewsDTO newsDTO){
-        validateNewsExistence(newsDTO.title(),true);
+        validateNewsExistence(newsDTO.id(),true);
         News newNews = DtoMapper.toEntity(newsDTO);
         newsRepository.save(newNews);
 
         return Response.successful("Created");
     }
-    public ResponseEntity<String> deleteNews(String title){
-        validateNewsExistence(title, false);
-        newsRepository.deleteByTitle(title);
+    public ResponseEntity<String> deleteNews(long id){
+        validateNewsExistence(id, false);
+        newsRepository.deleteById(id);
 
         return Response.successful("Deleted");
     }
     public ResponseEntity<String> updateNews(NewsDTO newsDTO){
-        validateNewsExistence(newsDTO.title(), false);
-        News newsToUpdate = DtoMapper.toEntity(newsDTO);
-        newsRepository.saveAndFlush(newsToUpdate);
+        validateNewsExistence(newsDTO.id(), false);
+        News updated = News.builder()
+                .id(newsDTO.id())
+                .title(newsDTO.title())
+                .description(newsDTO.description())
+                .articleText(newsDTO.articleText())
+                .imgData(newsDTO.imgData())
+                .build();
+        newsRepository.saveAndFlush(updated);
 
         return Response.successful("Updated");
     }
-    private void validateNewsExistence(String title, boolean validateTo){
-        if(newsRepository.findByTitle(title).isPresent()) {
+    private void validateNewsExistence(long id, boolean validateTo){
+       Optional<News> news = newsRepository.findById(id);
+        if(news.isPresent()) {
             if (validateTo) {
-                throw new DataIntegrityViolationException("Article with title " + title + " already exist");
+                throw new DataIntegrityViolationException("Article with id " + id + " already exist");
             }
-        }
-        else if(newsRepository.findByTitle(title).isEmpty() && !validateTo){
-                throw new NotFoundException("News");
+        }else {
+            throw new NotFoundException("News");
         }
     }
 }

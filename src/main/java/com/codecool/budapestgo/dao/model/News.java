@@ -15,5 +15,7 @@ public class News {
     private byte[] imgData;
     @NonNull private final String title;
     @NonNull private final String description;
-    @NonNull private final String articleText;
+    @NonNull
+    @Column(length = 60000)
+    private final String articleText;
 }

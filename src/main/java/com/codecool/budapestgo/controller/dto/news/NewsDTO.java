@@ -7,6 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record NewsDTO(
+        @NotNull long id,
         @NotNull byte[] imgData,
         @NotNull @NotBlank String title,
         @NotNull  @NotBlank String description,
@@ -14,6 +15,7 @@ public record NewsDTO(
 ) {
     public static NewsDTO of(News news) {
         return NewsDTO.builder()
+                .id(news.getId())
                 .imgData(news.getImgData())
                 .title(news.getTitle())
                 .description(news.getDescription())
