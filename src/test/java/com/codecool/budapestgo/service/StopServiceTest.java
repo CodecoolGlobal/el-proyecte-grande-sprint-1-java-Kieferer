@@ -2,6 +2,7 @@ package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.stop.NewStopDTO;
 import com.codecool.budapestgo.controller.dto.stop.StopDTO;
+import com.codecool.budapestgo.controller.dto.stop.UpdateStopDTO;
 import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
@@ -101,9 +102,10 @@ class StopServiceTest {
         assertThrows(NotFoundException.class, () -> stopService.deleteStopById(1L));
         verify(stopRepository, never()).deleteById(anyLong());
     }
+
     @Test
     void testAddStop() {
-        NewStopDTO stopDTO = new NewStopDTO("Stop",1.0,2.0);
+        NewStopDTO stopDTO = new NewStopDTO("Stop", 1.0, 2.0);
         Stop stop = DtoMapper.toEntity(stopDTO);
         when(stopRepository.save(any(Stop.class))).thenReturn(stop);
 
@@ -113,37 +115,30 @@ class StopServiceTest {
         verify(stopRepository, times(1)).save(any(Stop.class));
     }
 
-    /*
 
-@Test
-    void testAddStopWhenNotExists() {
-        StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
-        when(stopRepository.getStopByName(stopDTO.name())).thenReturn(Optional.empty());
+    @Test
+    void testUpdateStopWhenStopExists() {
+        Long stopId = 1L;
+        Stop existingStop = buildStop(stopId,"Old Stop",new Point(1.0,2.0));
+        Schedule schedule1 = Schedule.builder().id(1L).build();
+        Schedule schedule2 = Schedule.builder().id(2L).build();
+        existingStop.addSchedule(schedule1);
+        existingStop.addSchedule(schedule2);
 
-        ResponseEntity<String> response = stopService.addStop(stopDTO);
+        UpdateStopDTO updateStopDTO = new UpdateStopDTO(stopId,"New Stop",2.0,3.0);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Stop created", response.getBody());
-        verify(stopRepository, times(1)).save(argThat(stop ->
-                stop.getName().equals(stopDTO.name()) &&
-                        stop.getLocation().getLatitude() == stopDTO.latitude() &&
-                        stop.getLocation().getLongitude() == stopDTO.longitude()));
+        when(stopRepository.getStopById(stopId)).thenReturn(Optional.of(existingStop));
+
+        ResponseEntity<String> response = stopService.updateStop(updateStopDTO);
+
+        assertEquals("Stops updated successfully",response.getBody());
+        assertEquals(updateStopDTO.id(),existingStop.getId());
+        assertEquals(updateStopDTO.name(),existingStop.getName());
+        assertEquals(updateStopDTO.latitude(),existingStop.getLocation().getLatitude());
+        assertEquals(updateStopDTO.longitude(),existingStop.getLocation().getLongitude());
     }
-        @Test
-        void testUpdateStopWhenStopExists() {
-            StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
-            Stop stop = new Stop(1, "Old Stop", new Point(3.0, 4.0));
-            when(stopRepository.getStopByName(stopDTO.name())).thenReturn(Optional.of(stop));
-            when(stopRepository.save(stop)).thenReturn(stop);
 
-            ResponseEntity<String> response = stopService.updateStop(stopDTO);
-
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals("Stop updated", response.getBody());
-            assertEquals(stopDTO.latitude(), stop.getLocation().getLatitude());
-            assertEquals(stopDTO.longitude(), stop.getLocation().getLongitude());
-        }
-
+    /*
         @Test
         void testUpdateStopWhenStopNotExists() {
             StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
