@@ -1,15 +1,23 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/budapestgo
+    url: jdbc:postgresql://postgres:5432/budapestgo
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  web:
+    resources:
+      static-locations: classpath:/frontend/
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
