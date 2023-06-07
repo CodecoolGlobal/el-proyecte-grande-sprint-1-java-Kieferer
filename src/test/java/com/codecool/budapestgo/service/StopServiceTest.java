@@ -38,7 +38,7 @@ class StopServiceTest {
 
 
     @Test
-    void testGetAllStopsWhenHasStops() {
+    void testGetAllStopsReturnsAllStopsWhenStopsExist() {
         List<Stop> stops = new ArrayList<>();
         Stop stopOne = buildStop(1L, "Stop 1", new Point(1.0, 2.0));
         Stop stopTwo = buildStop(2L, "Stop 2", new Point(3.0, 4.0));
@@ -56,7 +56,7 @@ class StopServiceTest {
     }
 
     @Test
-    void testGetAllStopsWhenHasNoStops() {
+    void testGetAllStopsReturnsAllStopsWhenStopsNotExist() {
         List<Stop> stops = new ArrayList<>();
         when(stopRepository.findAll()).thenReturn(stops);
 
@@ -119,31 +119,28 @@ class StopServiceTest {
     @Test
     void testUpdateStopWhenStopExists() {
         Long stopId = 1L;
-        Stop existingStop = buildStop(stopId,"Old Stop",new Point(1.0,2.0));
+        Stop existingStop = buildStop(stopId, "Old Stop", new Point(1.0, 2.0));
 
-        UpdateStopDTO updateStopDTO = new UpdateStopDTO(stopId,"New Stop",2.0,3.0);
+        UpdateStopDTO updateStopDTO = new UpdateStopDTO(stopId, "New Stop", 2.0, 3.0);
 
         when(stopRepository.getStopById(stopId)).thenReturn(Optional.of(existingStop));
 
         ResponseEntity<String> response = stopService.updateStop(updateStopDTO);
 
-        assertEquals("Stops updated successfully",response.getBody());
-        verify(stopRepository,times(1)).save(any(Stop.class));
+        assertEquals("Stops updated successfully", response.getBody());
+        verify(stopRepository, times(1)).save(any(Stop.class));
     }
 
-    /*
-        @Test
-        void testUpdateStopWhenStopNotExists() {
-            StopDTO stopDTO = new StopDTO("Stop", 1.0, 2.0);
-            when(stopRepository.getStopByName(stopDTO.name())).thenReturn(Optional.empty());
 
-            ResponseEntity<String> response = stopService.updateStop(stopDTO);
+    @Test
+    void testUpdateStopWhenStopNotExists() {
+        when(stopRepository.getStopById(anyLong())).thenReturn(Optional.empty());
 
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            assertEquals("Stop not found", response.getBody());
-            verify(stopRepository, never()).save(any(Stop.class));
-        }
-    */
+        UpdateStopDTO updateStopDTO = new UpdateStopDTO(1L, "New Stop", 2.0, 3.0);
+
+        assertThrows(NotFoundException.class,()->stopService.updateStop(updateStopDTO));
+    }
+
     private Stop buildStop(Long id, String name, Point location) {
         return Stop.builder()
                 .id(id)
