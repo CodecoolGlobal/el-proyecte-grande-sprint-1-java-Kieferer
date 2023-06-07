@@ -54,6 +54,13 @@ class RouteServiceTest {
         assertEquals(0, routeDTOs.size());
     }
 
+    @Test
+    void testDeleteRoute() {
+        Long id = 1L;
+        routeService.deleteRoute(id);
+        verify(routeRepository, times(1)).deleteById(id);
+    }
+
     private Route buildRoute(Long id, String name, TransporterCategoryType categoryType) {
         return Route.builder()
                 .id(id)
