@@ -1,6 +1,7 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.route.RouteDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
 import com.codecool.budapestgo.dao.types.TransporterCategoryType;
@@ -9,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,7 +81,24 @@ class RouteServiceTest {
         assertEquals(HttpStatus.NOT_MODIFIED, response.getStatusCode());
         assertEquals("Routes couldn't be deleted", response.getBody());
     }
+    @Test
+    void testGetRouteByIdWhenFound() {
+        Long id = 1L;
+        Route route = buildRoute(id, "Route", TransporterCategoryType.BUS);
+        when(routeRepository.getRouteById(id)).thenReturn(Optional.of(route));
 
+        Route foundRoute = routeService.getRouteById(id);
+
+        assertEquals(route, foundRoute);
+    }
+
+    @Test
+    void testGetRouteByIdWhenNotFound() {
+        Long id = 1L;
+        when(routeRepository.getRouteById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> routeService.getRouteById(id));
+    }
     private Route buildRoute(Long id, String name, TransporterCategoryType categoryType) {
         return Route.builder()
                 .id(id)
