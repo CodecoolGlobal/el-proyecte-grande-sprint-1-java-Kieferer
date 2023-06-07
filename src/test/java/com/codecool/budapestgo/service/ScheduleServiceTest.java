@@ -152,7 +152,18 @@ class ScheduleServiceTest {
         assertEquals("Deleted all the schedules that had reference to given route ID", response.getBody());
         verify(scheduleRepository, times(1)).deleteAll(schedules);
     }
+    @Test
+    void testGetAllAssignedStopByRouteId() {
+        Long routeId = 1L;
+        List<Stop> stops = new ArrayList<>();
+        stops.add(buildStop(1L, "Stop 1",new Point(1.0,2.0)));
+        when(scheduleRepository.findStopByRouteId(routeId)).thenReturn(stops);
 
+        List<Stop> result = scheduleService.getAllAssignedStopByRouteId(routeId);
+
+        assertEquals(stops.size(), result.size());
+        assertEquals(stops, result);
+    }
     private Route buildRoute(Long id, String name, TransporterCategoryType transporterCategoryType) {
         return Route.builder()
                 .id(id)
