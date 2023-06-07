@@ -125,11 +125,28 @@ class ScheduleServiceTest {
         List<Schedule> schedules = new ArrayList<>();
         schedules.add(
                 buildSchedule(1L,
-                        buildRoute(routeId, "Route 1",TransporterCategoryType.METRO),
-                        buildStop(1L, "Stop 1",new Point(1.0,2.0))));
+                        buildRoute(routeId, "Route 1", TransporterCategoryType.METRO),
+                        buildStop(1L, "Stop 1", new Point(1.0, 2.0))));
         when(scheduleRepository.findByRouteId(routeId)).thenReturn(schedules);
 
         ResponseEntity<String> response = scheduleService.deleteScheduleByRouteId(routeId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Deleted all the schedules that had reference to given route ID", response.getBody());
+        verify(scheduleRepository, times(1)).deleteAll(schedules);
+    }
+
+    @Test
+    void testDeleteScheduleByStopId() {
+        Long stopId = 1L;
+        List<Schedule> schedules = new ArrayList<>();
+        schedules.add(
+                buildSchedule(1L,
+                        buildRoute(1L, "Route 1",TransporterCategoryType.METRO),
+                        buildStop(stopId, "Stop 1",new Point(1.0,2.0))));
+        when(scheduleRepository.findByStopId(stopId)).thenReturn(schedules);
+
+        ResponseEntity<String> response = scheduleService.deleteScheduleByStopId(stopId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Deleted all the schedules that had reference to given route ID", response.getBody());
