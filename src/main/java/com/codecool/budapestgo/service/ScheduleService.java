@@ -5,6 +5,7 @@ import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.ScheduleRepository;
+import com.codecool.budapestgo.utils.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class ScheduleService {
 
         stop.addSchedule(routeSchedule);
         route.addSchedule(routeSchedule);
-        return ResponseEntity.ok("Created new schedule");
+        return Response.successful(("Created"));
     }
     public List<Schedule> getRouteSchedule(String name){
         return scheduleRepository.findByRouteName(name);

@@ -7,6 +7,7 @@ import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.repository.RouteRepository;
+import com.codecool.budapestgo.dao.types.TransporterCategoryType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class RouteService {
     public ResponseEntity<String> addRoute(NewRouteDTO newRouteDTO) {
             Route route = Route.builder()
                     .name(newRouteDTO.name())
+                    .categoryType(TransporterCategoryType.valueOf(newRouteDTO.category()))
                     .build();
             routeRepository.save(route);
             return ResponseEntity.ok("Route created");
@@ -45,6 +47,7 @@ public class RouteService {
         Route updatedRoute = Route.builder()
                 .id(updateRouteDTO.id())
                 .name(updateRouteDTO.name())
+                .categoryType(TransporterCategoryType.valueOf(updateRouteDTO.category()))
                 .schedules(schedules)
                 .build();
 

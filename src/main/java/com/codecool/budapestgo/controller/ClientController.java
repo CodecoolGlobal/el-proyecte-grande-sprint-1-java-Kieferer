@@ -3,8 +3,9 @@ package com.codecool.budapestgo.controller;
 import com.codecool.budapestgo.controller.dto.client.ClientDTO;
 import com.codecool.budapestgo.controller.dto.client.ClientUpdateDTO;
 import com.codecool.budapestgo.service.ClientService;
+import com.codecool.budapestgo.service.PurchasedPassService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClientController {
     private final ClientService clientService;
+    private final PurchasedPassService purchasedPassService;
     @GetMapping("/all")
     public List<ClientDTO> getAllClient() {
         return clientService.getAllClient();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClientById(@Valid @PathVariable @Min(1) Long id) {
-       return clientService.deleteClientById(id);
+    @DeleteMapping("/{email}")
+    public ResponseEntity<String> deleteClientByEmail(@Valid @PathVariable @NotBlank String email) {
+        purchasedPassService.deletePassesByClientEmail(email);
+        return clientService.deleteClientByEmail(email);
     }
 
     @PutMapping
