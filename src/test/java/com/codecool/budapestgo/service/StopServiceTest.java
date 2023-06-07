@@ -13,8 +13,6 @@ import com.codecool.budapestgo.utils.Response;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
@@ -155,4 +153,3 @@ class StopServiceTest {
         assertEquals(stop.getLocation().getLongitude(), stopDTO.longitude());
     }
 }
-//change
