@@ -10,6 +10,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -59,6 +61,22 @@ class RouteServiceTest {
         Long id = 1L;
         routeService.deleteRoute(id);
         verify(routeRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void testDeleteAllRoutesSuccess() {
+        routeService.deleteAllRoutes();
+        verify(routeRepository, times(1)).deleteAll();
+    }
+
+    @Test
+    void testDeleteAllRoutesFailure() {
+        doThrow(new RuntimeException()).when(routeRepository).deleteAll();
+
+        ResponseEntity<String> response = routeService.deleteAllRoutes();
+
+        assertEquals(HttpStatus.NOT_MODIFIED, response.getStatusCode());
+        assertEquals("Routes couldn't be deleted", response.getBody());
     }
 
     private Route buildRoute(Long id, String name, TransporterCategoryType categoryType) {
