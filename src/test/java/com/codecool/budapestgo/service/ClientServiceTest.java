@@ -92,6 +92,33 @@ class ClientServiceTest {
         assertThrows(NotFoundException.class, () -> clientService.deleteClientByEmail(email));
     }
 
+    @Test
+    void testUpdateClient() {
+        String email = "client@example.com";
+        String newPassword = "newPassword";
+        ClientUpdateDTO updateClientDTO = new ClientUpdateDTO(email, newPassword);
+        Client client = buildClient(1L, email, "password",Role.CUSTOMER);
+        when(clientRepository.findClientByEmail(email)).thenReturn(Optional.of(client));
+
+        ResponseEntity<String> response = clientService.updateClient(updateClientDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Updated successfully", response.getBody());
+        assertEquals(newPassword, client.getPassword());
+        verify(clientRepository, times(1)).save(client);
+    }
+
+    @Test
+    void testUpdateClientThrowsNotFoundException() {
+        String email = "client@example.com";
+        String newPassword = "newPassword";
+        ClientUpdateDTO updateClientDTO = new ClientUpdateDTO(email, newPassword);
+        when(clientRepository.findClientByEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> clientService.updateClient(updateClientDTO));
+    }
+
+
     private void assertClientEquals(Client client, ClientDTO clientDTO) {
         assertEquals(client.getId(), clientDTO.id());
         assertEquals(client.getEmail(), clientDTO.email());
