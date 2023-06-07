@@ -51,6 +51,7 @@ class ClientServiceTest {
 
         }
     }
+
     @Test
     void testGetAllClientReturnsEmptyListWhenClientsNotExist() {
         List<Client> clients = new ArrayList<>();
@@ -60,7 +61,8 @@ class ClientServiceTest {
 
         assertEquals(0, clientDTOs.size());
     }
-    private Client buildClient(Long id, String email, String password,Role role) {
+
+    private Client buildClient(Long id, String email, String password, Role role) {
         return Client.builder()
                 .id(id)
                 .email(email)
@@ -69,8 +71,29 @@ class ClientServiceTest {
                 .build();
     }
 
+    @Test
+    void testDeleteClientByEmail() {
+        String email = "client@example.com";
+        Client client = buildClient(1L, email, "password",Role.CUSTOMER);
+        when(clientRepository.findClientByEmail(email)).thenReturn(Optional.of(client));
+
+        ResponseEntity<String> response = clientService.deleteClientByEmail(email);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Deleted successfully", response.getBody());
+        verify(clientRepository, times(1)).deleteById(client.getId());
+    }
+
+    @Test
+    void testDeleteClientByEmailThrowsNotFoundException() {
+        String email = "client@example.com";
+        when(clientRepository.findClientByEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> clientService.deleteClientByEmail(email));
+    }
+
     private void assertClientEquals(Client client, ClientDTO clientDTO) {
-        assertEquals(client.getId(),clientDTO.id());
+        assertEquals(client.getId(), clientDTO.id());
         assertEquals(client.getEmail(), clientDTO.email());
         assertEquals(client.getRole().name(), clientDTO.clientCategoryType());
     }
