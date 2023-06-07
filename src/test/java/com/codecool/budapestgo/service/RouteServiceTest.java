@@ -44,6 +44,16 @@ class RouteServiceTest {
         }
     }
 
+    @Test
+    void testGetAllRoutesReturnsEmptyListWhenRoutesNotExist() {
+        List<Route> routes = new ArrayList<>();
+        when(routeRepository.findAll()).thenReturn(routes);
+
+        List<RouteDTO> routeDTOs = routeService.getAllRoutes();
+
+        assertEquals(0, routeDTOs.size());
+    }
+
     private Route buildRoute(Long id, String name, TransporterCategoryType categoryType) {
         return Route.builder()
                 .id(id)
