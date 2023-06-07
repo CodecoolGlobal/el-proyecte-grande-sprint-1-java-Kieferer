@@ -1,6 +1,7 @@
 package com.codecool.budapestgo.controller;
 
 import com.codecool.budapestgo.controller.dto.news.NewsDTO;
+import com.codecool.budapestgo.controller.dto.news.NewsUpdateDTO;
 import com.codecool.budapestgo.service.NewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class NewsController {
         return newsService.deleteNews(id);
     }
     @PutMapping
-    public ResponseEntity<String> updateNewsByTitle(@Valid @RequestBody NewsDTO newsDTO){
+    public ResponseEntity<String> updateNewsByTitle(@Valid @RequestBody NewsUpdateDTO newsDTO){
         return newsService.updateNews(newsDTO);
     }
 }

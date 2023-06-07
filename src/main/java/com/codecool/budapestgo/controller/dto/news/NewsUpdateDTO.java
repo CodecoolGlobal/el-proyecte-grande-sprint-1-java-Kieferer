@@ -6,14 +6,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record NewsDTO(
+public record NewsUpdateDTO(
+        @NotNull long id,
         @NotNull byte[] imgData,
         @NotNull @NotBlank String title,
         @NotNull  @NotBlank String description,
         @NotNull @NotBlank String articleText
 ) {
-    public static NewsDTO of(News news) {
-        return NewsDTO.builder()
+    public static NewsUpdateDTO of(News news) {
+        return NewsUpdateDTO.builder()
+                .id(news.getId())
                 .imgData(news.getImgData())
                 .title(news.getTitle())
                 .description(news.getDescription())
