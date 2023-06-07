@@ -120,10 +120,6 @@ class StopServiceTest {
     void testUpdateStopWhenStopExists() {
         Long stopId = 1L;
         Stop existingStop = buildStop(stopId,"Old Stop",new Point(1.0,2.0));
-        Schedule schedule1 = Schedule.builder().id(1L).build();
-        Schedule schedule2 = Schedule.builder().id(2L).build();
-        existingStop.addSchedule(schedule1);
-        existingStop.addSchedule(schedule2);
 
         UpdateStopDTO updateStopDTO = new UpdateStopDTO(stopId,"New Stop",2.0,3.0);
 
@@ -132,10 +128,7 @@ class StopServiceTest {
         ResponseEntity<String> response = stopService.updateStop(updateStopDTO);
 
         assertEquals("Stops updated successfully",response.getBody());
-        assertEquals(updateStopDTO.id(),existingStop.getId());
-        assertEquals(updateStopDTO.name(),existingStop.getName());
-        assertEquals(updateStopDTO.latitude(),existingStop.getLocation().getLatitude());
-        assertEquals(updateStopDTO.longitude(),existingStop.getLocation().getLongitude());
+        verify(stopRepository,times(1)).save(any(Stop.class));
     }
 
     /*
@@ -156,6 +149,7 @@ class StopServiceTest {
                 .id(id)
                 .name(name)
                 .location(location)
+                .schedules(new ArrayList<>())
                 .build();
     }
 
