@@ -5,11 +5,15 @@ import com.codecool.budapestgo.dao.model.Route;
 import com.codecool.budapestgo.dao.model.Schedule;
 import com.codecool.budapestgo.dao.model.Stop;
 import com.codecool.budapestgo.dao.repository.ScheduleRepository;
+import com.codecool.budapestgo.dao.types.TransporterCategoryType;
+import com.codecool.budapestgo.data.Point;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,8 +42,8 @@ class ScheduleServiceTest {
         Long stopId = 1L;
         ScheduleDTO scheduleDTO = new ScheduleDTO(routeId, stopId);
 
-        Route route = buildRoute(routeId, "Route 1");
-        Stop stop = buildStop(stopId, "Stop 1");
+        Route route = buildRoute(routeId, "Route 1", TransporterCategoryType.METRO);
+        Stop stop = buildStop(stopId, "Stop 1", new Point(1.0,2.0));
 
         when(routeService.getRouteById(routeId)).thenReturn(route);
         when(stopService.getStopById(stopId)).thenReturn(stop);
@@ -49,22 +53,24 @@ class ScheduleServiceTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Created successfully", response.getBody());
         verify(scheduleRepository, times(1)).save(any(Schedule.class));
-        verify(stop, times(1)).addSchedule(any(Schedule.class));
-        verify(route, times(1)).addSchedule(any(Schedule.class));
     }
 
 
-    private Route buildRoute(Long id, String name) {
+    private Route buildRoute(Long id, String name, TransporterCategoryType transporterCategoryType) {
         return Route.builder()
                 .id(id)
                 .name(name)
+                .categoryType(transporterCategoryType)
+                .schedules(new ArrayList<>())
                 .build();
     }
 
-    private Stop buildStop(Long id, String name) {
+    private Stop buildStop(Long id, String name, Point point) {
         return Stop.builder()
                 .id(id)
                 .name(name)
+                .location(point)
+                .schedules(new ArrayList<>())
                 .build();
     }
 
