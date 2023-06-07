@@ -72,6 +72,38 @@ class ScheduleServiceTest {
         assertEquals(schedules, result);
     }
 
+    @Test
+    void testGetAllSchedule() {
+        List<Schedule> schedules = new ArrayList<>();
+        schedules.add(
+                buildSchedule(1L,
+                        buildRoute(1L, "Route 1", TransporterCategoryType.BUS),
+                        buildStop(1L, "Stop 1", new Point(2.1, 0.1))));
+        when(scheduleRepository.findAll()).thenReturn(schedules);
+
+        List<ScheduleDTO> result = scheduleService.getAllSchedule();
+
+        assertEquals(schedules.size(), result.size());
+        for (int i = 0; i < schedules.size(); i++) {
+            assertScheduleEquals(schedules.get(i), result.get(i));
+        }
+    }
+
+    @Test
+    void testGetStopsOfRouteByName() {
+        String routeName = "Route 1";
+        List<Schedule> schedules = new ArrayList<>();
+        schedules.add(
+                buildSchedule(1L,
+                        buildRoute(1L, routeName,TransporterCategoryType.METRO),
+                        buildStop(1L, "Stop 1",new Point())));
+        when(scheduleRepository.findByRouteName(routeName)).thenReturn(schedules);
+
+        List<Stop> result = scheduleService.getStopsOfRouteByName(routeName);
+
+        assertEquals(schedules.size(), result.size());
+        assertEquals(schedules.get(0).getStop(), result.get(0));
+    }
 
     private Route buildRoute(Long id, String name, TransporterCategoryType transporterCategoryType) {
         return Route.builder()
