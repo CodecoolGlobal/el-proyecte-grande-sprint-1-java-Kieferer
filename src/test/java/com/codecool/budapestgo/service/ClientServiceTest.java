@@ -51,7 +51,15 @@ class ClientServiceTest {
 
         }
     }
+    @Test
+    void testGetAllClientReturnsEmptyListWhenClientsNotExist() {
+        List<Client> clients = new ArrayList<>();
+        when(clientRepository.findAll()).thenReturn(clients);
 
+        List<ClientDTO> clientDTOs = clientService.getAllClient();
+
+        assertEquals(0, clientDTOs.size());
+    }
     private Client buildClient(Long id, String email, String password,Role role) {
         return Client.builder()
                 .id(id)
