@@ -26,8 +26,8 @@ jobs:
 
       - name: Build and Push Docker Image
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME1 }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD1 }}
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -t $DOCKER_USERNAME/budapestgo2 .
