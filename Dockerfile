@@ -6,7 +6,7 @@ RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
 RUN mkdir /app
-COPY --from=build /project/target/robodog-*.jar robodog.jar
+COPY --from=build /project/target/budapestgo-*.jar budapestgo.jar
 WORKDIR /app
 COPY target/budapestgo*.jar budapestgo.jar
 EXPOSE 8080
