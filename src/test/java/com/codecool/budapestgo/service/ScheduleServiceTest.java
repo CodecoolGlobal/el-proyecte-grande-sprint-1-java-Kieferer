@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -95,14 +96,27 @@ class ScheduleServiceTest {
         List<Schedule> schedules = new ArrayList<>();
         schedules.add(
                 buildSchedule(1L,
-                        buildRoute(1L, routeName,TransporterCategoryType.METRO),
-                        buildStop(1L, "Stop 1",new Point())));
+                        buildRoute(1L, routeName, TransporterCategoryType.METRO),
+                        buildStop(1L, "Stop 1", new Point())));
         when(scheduleRepository.findByRouteName(routeName)).thenReturn(schedules);
 
         List<Stop> result = scheduleService.getStopsOfRouteByName(routeName);
 
         assertEquals(schedules.size(), result.size());
         assertEquals(schedules.get(0).getStop(), result.get(0));
+    }
+
+    @Test
+    void testDeleteScheduleById() {
+        Long scheduleId = 1L;
+        Schedule schedule = buildSchedule(scheduleId,
+                buildRoute(1L, "Route 1",TransporterCategoryType.METRO),
+                buildStop(1L, "Stop 1",new Point(2.0,1.0)));
+        when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.of(schedule));
+
+        scheduleService.deleteScheduleById(scheduleId);
+
+        verify(scheduleRepository, times(1)).deleteById(scheduleId);
     }
 
     private Route buildRoute(Long id, String name, TransporterCategoryType transporterCategoryType) {
