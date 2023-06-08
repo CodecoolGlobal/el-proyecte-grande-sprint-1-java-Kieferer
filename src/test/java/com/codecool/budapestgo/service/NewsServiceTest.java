@@ -8,12 +8,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class NewsServiceTest {
@@ -55,11 +60,31 @@ class NewsServiceTest {
     }
 
     @Test
-    void testGetNewsByTitle_ThrowsNotFoundException() {
+    void testGetNewsByTitleThrowsNotFoundException() {
         String title = "Non-existent Title";
         when(newsRepository.findByTitle(title)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> newsService.getNewsByTitle(title));
+    }
+
+    @Test
+    void testAddNews() {
+        NewsDTO newsDTO = buildNewsDTO("New Title");
+        when(newsRepository.findByTitle(newsDTO.title())).thenReturn(Optional.empty());
+
+        ResponseEntity<String> response = newsService.addNews(newsDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Created successfully", response.getBody());
+        verify(newsRepository).save(any(News.class));
+    }
+
+    @Test
+    void testAddNewsThrowsDataIntegrityViolationException() {
+        NewsDTO newsDTO = buildNewsDTO("Duplicate Title");
+        when(newsRepository.findByTitle(newsDTO.title())).thenReturn(Optional.of(buildNews(newsDTO.title())));
+
+        assertThrows(DataIntegrityViolationException.class, () -> newsService.addNews(newsDTO));
     }
 
     private News buildNews(String title) {
@@ -73,6 +98,9 @@ class NewsServiceTest {
     private NewsDTO buildNewsDTO(String title) {
         return NewsDTO.builder()
                 .title(title)
+                .articleText("text")
+                .description("desc")
+                .imgData(new byte[0])
                 .build();
     }
 
