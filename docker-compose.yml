@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   postgres:
     image: postgres:latest
@@ -6,8 +6,6 @@ services:
     container_name: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    expose:
-      - 5432
     ports:
       - 5432:5432
     environment:
@@ -15,10 +13,9 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=budapestgo
     restart: unless-stopped
+
   budapestgo2:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: kieferer/budapestgo2:dev
     network_mode: budapestgo2network
     container_name: budapest-go-2
     expose:
