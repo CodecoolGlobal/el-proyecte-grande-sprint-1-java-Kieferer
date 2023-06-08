@@ -86,7 +86,25 @@ class NewsServiceTest {
 
         assertThrows(DataIntegrityViolationException.class, () -> newsService.addNews(newsDTO));
     }
+    @Test
+    void testDeleteNews() {
+        String title = "Title";
+        when(newsRepository.findByTitle(title)).thenReturn(Optional.of(buildNews(title)));
 
+        ResponseEntity<String> response = newsService.deleteNews(title);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Deleted successfully", response.getBody());
+        verify(newsRepository).deleteByTitle(title);
+    }
+
+    @Test
+    void testDeleteNews_ThrowsNotFoundException() {
+        String title = "Non-existent Title";
+        when(newsRepository.findByTitle(title)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> newsService.deleteNews(title));
+    }
     private News buildNews(String title) {
         return News.builder()
                 .title(title)
