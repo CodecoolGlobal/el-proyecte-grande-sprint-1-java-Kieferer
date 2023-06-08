@@ -26,6 +26,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        
+      - name: Docker Compose Action
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: docker-compose.yml
 
       - name: Build and Push Docker Image
         env:
@@ -35,10 +40,5 @@ jobs:
           IMAGE_TAG: dev
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $IMAGE_NAME:$IMAGE_TAG .
-          docker push $IMAGE_NAME:$IMAGE_TAG
-
-      - name: Docker Compose Action
-        uses: isbang/compose-action@v1.4.1
-        with:
-          compose-file: docker-compose.yml
+          docker compose build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker compose push $IMAGE_NAME:$IMAGE_TAG
