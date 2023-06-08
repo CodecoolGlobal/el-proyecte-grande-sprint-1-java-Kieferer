@@ -30,13 +30,9 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/budapestgo2
           IMAGE_TAG: dev
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $IMAGE_NAME:$IMAGE_TAG .
-          docker push $IMAGE_NAME:$IMAGE_TAG
-
-      - name: Start Services
-        uses: compose-action@v2
+          
+      - name: Start services with Docker Compose
+        uses: docker/compose-action@v2
         with:
           compose-file: docker-compose.yml
           compose-command: up -d
