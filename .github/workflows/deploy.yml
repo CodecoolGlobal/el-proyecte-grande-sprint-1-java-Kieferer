@@ -40,5 +40,5 @@ jobs:
           IMAGE_TAG: dev
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker compose build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker compose build --tag $IMAGE_NAME:$IMAGE_TAG .
           docker compose push $IMAGE_NAME:$IMAGE_TAG
