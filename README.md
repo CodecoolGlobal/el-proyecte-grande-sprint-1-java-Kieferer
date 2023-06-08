@@ -6,6 +6,7 @@ BudapestGo2 is a pet project which meant to implement every relevant features of
 - [Description for the project](#dockerized-version-can-be-pulled-from-DockerHub)
     - [Section 2 - Used technologies](#section-2---Used-technologies)
     - [Section 3 - Features](#section-3---Features)
+    - [Section 4 - Getting started](#section-3---Getting-Started)
 
 #Dockerized version can be pulled from DockerHub:
 https://hub.docker.com/repository/docker/kieferer/budapestgo2/general
@@ -51,7 +52,7 @@ Follow these instructions to get a copy of the BudapestGo2 project up and runnin
  * JDBC Database (e.g., PostgreSQL)
  * Any required dependencies as specified in the project configuration
 
-Installation
+##Installation
 
 Clone the repository: git clone https://github.com/CodecoolGlobal/el-proyecte-grande-sprint-1-java-Kieferer
 Configure the project with the necessary environment variables and database connection details.
@@ -61,4 +62,3 @@ Access the application through the provided URL and create your account to start
 
   
 
-  
