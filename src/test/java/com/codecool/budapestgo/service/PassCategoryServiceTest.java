@@ -1,18 +1,24 @@
 package com.codecool.budapestgo.service;
 
+import com.codecool.budapestgo.controller.dto.pass.PassCategoryRegisterDTO;
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
 import com.codecool.budapestgo.dao.model.PassCategory;
 import com.codecool.budapestgo.dao.repository.PassCategoryRepository;
+import com.codecool.budapestgo.utils.DtoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class PassCategoryServiceTest {
     @Mock
@@ -39,6 +45,31 @@ class PassCategoryServiceTest {
         for (int i = 0; i < passCategories.size(); i++) {
             assertPassCategoryEquals(passCategories.get(i), result.get(i));
         }
+    }
+
+    @Test
+    void testAddPassCategory() {
+        PassCategoryRegisterDTO registerDTO = new PassCategoryRegisterDTO("Category 1", "Duration 1",1L,100);
+        PassCategory passCategory = DtoMapper.toEntity(registerDTO);
+        when(passCategoryRepository.findByCategoryAndPassDuration(registerDTO.category(), registerDTO.passDuration()))
+                .thenReturn(Optional.empty());
+        when(passCategoryRepository.save(any(PassCategory.class))).thenReturn(passCategory);
+
+        ResponseEntity<String> response = passCategoryService.addPassCategory(registerDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Pass category created successfully", response.getBody());
+        verify(passCategoryRepository, times(1)).save(any(PassCategory.class));
+    }
+
+    @Test
+    void testAddPassCategoryWhenCategoryExist() {
+        PassCategoryRegisterDTO registerDTO =  new PassCategoryRegisterDTO("Category 1", "Duration 1",1L,100);
+        when(passCategoryRepository.findByCategoryAndPassDuration(registerDTO.category(), registerDTO.passDuration()))
+                .thenReturn(Optional.of(buildPassCategory(1L, "Category 1", "Duration 1",1L,100)));
+
+        assertThrows(DataIntegrityViolationException.class, () -> passCategoryService.addPassCategory(registerDTO));
+        verify(passCategoryRepository, never()).save(any(PassCategory.class));
     }
 
     private PassCategory buildPassCategory(Long id, String category, String duration, Long expire, Integer price) {
