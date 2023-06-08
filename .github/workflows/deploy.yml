@@ -32,6 +32,7 @@ jobs:
           IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/budapestgo2
           IMAGE_TAG: dev
         run: |
+          docker network create budapest2network
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
