@@ -55,6 +55,8 @@ class PurchasedPassServiceTest {
         List<PurchasedPass> expiredPasses = new ArrayList<>();
         expiredPasses.add(
                 buildPurchasedPass("Pass 1", LocalDate.now().minusDays(1)));
+        expiredPasses.add(
+                buildPurchasedPass("Pass 2", LocalDate.now().minusDays(1)));
         when(purchasedPassRepository.getAllExpiredPassesByClient(email)).thenReturn(expiredPasses);
 
         List<PurchasedPassResponseDTO> result = purchasedPassService.getExpiredPasses(email);
@@ -62,6 +64,22 @@ class PurchasedPassServiceTest {
         assertEquals(expiredPasses.size(), result.size());
         for (int i = 0; i < expiredPasses.size(); i++) {
             assertPurchasedPassEquals(expiredPasses.get(i), result.get(i));
+        }
+    }
+
+    @Test
+    void testGetActivePasses() {
+        String email = "test@example.com";
+        List<PurchasedPass> activePasses = new ArrayList<>();
+        activePasses.add(buildPurchasedPass("Pass 1", LocalDate.now().plusDays(1)));
+        activePasses.add(buildPurchasedPass("Pass 2", LocalDate.now().plusDays(1)));
+        when(purchasedPassRepository.getActivePassesByClient(email)).thenReturn(activePasses);
+
+        List<PurchasedPassResponseDTO> result = purchasedPassService.getActivePasses(email);
+
+        assertEquals(activePasses.size(), result.size());
+        for (int i = 0; i < activePasses.size(); i++) {
+            assertPurchasedPassEquals(activePasses.get(i), result.get(i));
         }
     }
 
