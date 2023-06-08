@@ -95,6 +95,32 @@ class PassCategoryServiceTest {
         verify(passCategoryRepository, never()).deleteById(categoryId);
     }
 
+    @Test
+    void testUpdatePassCategory() {
+        PassCategoryResponseDTO responseDTO = new PassCategoryResponseDTO("Category 1", "Duration 1",1L,100,3L);
+        PassCategory updatedPassCategory = DtoMapper.toEntity(responseDTO);
+        when(passCategoryRepository.findById(responseDTO.id())).thenReturn(
+                Optional.of(buildPassCategory(1L, "Category 1", "Duration 1", 1L, 100)));
+        when(passCategoryRepository.saveAndFlush(any(PassCategory.class))).thenReturn(updatedPassCategory);
+
+        ResponseEntity<String> response = passCategoryService.updatePassCategory(responseDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Updated successfully", response.getBody());
+        verify(passCategoryRepository, times(1)).saveAndFlush(any(PassCategory.class));
+    }
+
+    @Test
+    void testUpdatePassCategoryNotFound() {
+        PassCategoryResponseDTO responseDTO = new PassCategoryResponseDTO("Category 1", "Duration 1",1L,100,3L);
+        when(passCategoryRepository.findById(responseDTO.id())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> passCategoryService.updatePassCategory(responseDTO));
+        verify(passCategoryRepository, never()).saveAndFlush(any(PassCategory.class));
+    }
+
+   
+
     private PassCategory buildPassCategory(Long id, String category, String duration, Long expire, Integer price) {
         return PassCategory.builder()
                 .id(id)
