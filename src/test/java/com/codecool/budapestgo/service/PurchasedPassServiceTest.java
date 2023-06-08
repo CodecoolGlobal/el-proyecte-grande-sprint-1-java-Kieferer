@@ -49,7 +49,23 @@ class PurchasedPassServiceTest {
         }
     }
 
-    private PurchasedPass buildPurchasedPass(String category,LocalDate expirationDate) {
+    @Test
+    void testGetExpiredPasses() {
+        String email = "test@example.com";
+        List<PurchasedPass> expiredPasses = new ArrayList<>();
+        expiredPasses.add(
+                buildPurchasedPass("Pass 1", LocalDate.now().minusDays(1)));
+        when(purchasedPassRepository.getAllExpiredPassesByClient(email)).thenReturn(expiredPasses);
+
+        List<PurchasedPassResponseDTO> result = purchasedPassService.getExpiredPasses(email);
+
+        assertEquals(expiredPasses.size(), result.size());
+        for (int i = 0; i < expiredPasses.size(); i++) {
+            assertPurchasedPassEquals(expiredPasses.get(i), result.get(i));
+        }
+    }
+
+    private PurchasedPass buildPurchasedPass(String category, LocalDate expirationDate) {
         PassCategory passCategory = buildPassCategory(category);
         return PurchasedPass.builder()
                 .passCategory(passCategory)
