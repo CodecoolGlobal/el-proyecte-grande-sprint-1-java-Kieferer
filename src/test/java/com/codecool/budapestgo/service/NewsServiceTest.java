@@ -1,6 +1,7 @@
 package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.news.NewsDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.News;
 import com.codecool.budapestgo.dao.repository.NewsRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -41,6 +43,25 @@ class NewsServiceTest {
         }
     }
 
+    @Test
+    void testGetNewsByTitle() {
+        String title = "Title";
+        News news = buildNews(title);
+        when(newsRepository.findByTitle(title)).thenReturn(Optional.of(news));
+
+        NewsDTO result = newsService.getNewsByTitle(title);
+
+        assertNewsEquals(news, result);
+    }
+
+    @Test
+    void testGetNewsByTitle_ThrowsNotFoundException() {
+        String title = "Non-existent Title";
+        when(newsRepository.findByTitle(title)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> newsService.getNewsByTitle(title));
+    }
+
     private News buildNews(String title) {
         return News.builder()
                 .title(title)
@@ -49,7 +70,11 @@ class NewsServiceTest {
                 .build();
     }
 
-    
+    private NewsDTO buildNewsDTO(String title) {
+        return NewsDTO.builder()
+                .title(title)
+                .build();
+    }
 
     private void assertNewsEquals(News expected, NewsDTO actual) {
         assertEquals(expected.getTitle(), actual.title());
