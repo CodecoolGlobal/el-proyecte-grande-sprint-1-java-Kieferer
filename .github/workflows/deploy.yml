@@ -37,7 +37,7 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
 
       - name: Start Services
-        uses: docker/compose@2
+        uses: docker/compose@1
         with:
           compose-file: docker-compose.yml
           compose-command: up -d
