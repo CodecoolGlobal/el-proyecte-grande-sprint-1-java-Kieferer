@@ -97,7 +97,26 @@ class NewsServiceTest {
         assertEquals("Deleted successfully", response.getBody());
         verify(newsRepository).deleteByTitle(title);
     }
+    @Test
+    void testUpdateNews() {
+        NewsDTO newsDTO = buildNewsDTO("Title");
+        News news = buildNews(newsDTO.title());
+        when(newsRepository.findByTitle(newsDTO.title())).thenReturn(Optional.of(news));
 
+        ResponseEntity<String> response = newsService.updateNews(newsDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Updated successfully", response.getBody());
+        verify(newsRepository).saveAndFlush(any(News.class));
+    }
+
+    @Test
+    void testUpdateNews_ThrowsNotFoundException() {
+        NewsDTO newsDTO = buildNewsDTO("Non-existent Title");
+        when(newsRepository.findByTitle(newsDTO.title())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> newsService.updateNews(newsDTO));
+    }
     @Test
     void testDeleteNews_ThrowsNotFoundException() {
         String title = "Non-existent Title";
