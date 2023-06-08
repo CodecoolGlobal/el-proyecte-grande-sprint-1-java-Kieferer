@@ -30,6 +30,5 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build $DOCKER_USERNAME/budapestgo2 .
-          dockar tag budapestgo2 $DOCKER_USERNAME/budapestgo2
+          docker build -t $DOCKER_USERNAME/budapestgo2 .
           docker push $DOCKER_USERNAME/budapestgo2
