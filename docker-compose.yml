@@ -15,6 +15,7 @@ services:
     restart: unless-stopped
 
   budapestgo2:
+    image: kieferer/budapestgo2
     build:
       context: .
       dockerfile: Dockerfile
