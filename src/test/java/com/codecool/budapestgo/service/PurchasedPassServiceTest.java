@@ -21,8 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class PurchasedPassServiceTest {
     @Mock
@@ -90,6 +89,7 @@ class PurchasedPassServiceTest {
             assertPurchasedPassEquals(activePasses.get(i), result.get(i));
         }
     }
+
     @Test
     void testAddPass() {
         String email = "test@example.com";
@@ -110,6 +110,28 @@ class PurchasedPassServiceTest {
         assertEquals("Purchased successfully", response.getBody());
         verify(purchasedPassRepository).save(any(PurchasedPass.class));
     }
+
+    @Test
+    void testDeletePassesByClientEmail() {
+        String email = "test@example.com";
+        Client client = buildClient(email);
+        List<PurchasedPass> purchasedPasses = new ArrayList<>();
+        PurchasedPass pass1 = buildPurchasedPass("Pass 1", LocalDate.now());
+        pass1.setClient(client);
+        PurchasedPass pass2 = buildPurchasedPass("Pass 2", LocalDate.now());
+        pass2.setClient(client);
+        purchasedPasses.add(pass1);
+        purchasedPasses.add(pass2);
+
+        when(purchasedPassRepository.findAllByByClient(email)).thenReturn(purchasedPasses);
+
+        ResponseEntity<String> response = purchasedPassService.deletePassesByClientEmail(email);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Passes of client deleted successfully", response.getBody());
+        verify(purchasedPassRepository).deleteAllByClient_Email(email);
+    }
+
     private PurchasedPass buildPurchasedPass(String category, LocalDate expirationDate) {
         PassCategory passCategory = buildPassCategory(category);
         return PurchasedPass.builder()
@@ -126,6 +148,7 @@ class PurchasedPassServiceTest {
                 .price(10)
                 .build();
     }
+
     private Client buildClient(String email) {
         return Client.builder()
                 .email(email)
