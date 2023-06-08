@@ -8,12 +8,12 @@ BudapestGo2 is a pet project which meant to implement every relevant features of
     - [Section 3 - Features](#section-3---Features)
     - [Section 4 - Getting started](#section-3---Getting-Started)
 
-#Dockerized version can be pulled from DockerHub:
+# Dockerized version can be pulled from DockerHub:
 https://hub.docker.com/repository/docker/kieferer/budapestgo2/general
 
 The application has a site for 'customers' which passangers can use to get information about routes, stops and also able to manage their tickets and passes. BudapestGo2 built in a way that its not relay on system administrators or programmers for maintaining and updating content and some specific kind of aspects which gives flexibility and reduces causes to touch the code. This achieved by an 'employee' site where authorized users can register new and modify existing routes, stops, passes and articles with images.
 
-##Used technologies:
+## Used technologies:
 
  Backend
   - Java,
@@ -31,7 +31,7 @@ The application has a site for 'customers' which passangers can use to get infor
   Others
   - CI/CD GitHub workflows
 
-##Features
+## Features
 
 User Registration and Authentication: Users can create accounts and securely log in to the platform to ask and answer questions. On the other hand for the employees the admin registrates them into the database.
 
@@ -41,18 +41,18 @@ Pass Buy Functionality: Users not just be able to buy different type of passes b
 
 News Section: Users can read and select news for more details on the homepage. The employees can create and modify news. 
 
-##Getting Started
+## Getting Started
 
 Follow these instructions to get a copy of the BudapestGo2 project up and running on your local machine for development and testing purposes.
 
-##Prerequisites
+## Prerequisites
 
  * Java Development Kit (JDK)
  * Spring Framework
  * JDBC Database (e.g., PostgreSQL)
  * Any required dependencies as specified in the project configuration
 
-##Installation
+## Installation
 
 Clone the repository: git clone https://github.com/CodecoolGlobal/el-proyecte-grande-sprint-1-java-Kieferer
 Configure the project with the necessary environment variables and database connection details.
