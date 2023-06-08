@@ -15,7 +15,9 @@ services:
     restart: unless-stopped
 
   budapestgo2:
-    image: kieferer/budapestgo2:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
     network_mode: budapestgo2network
     container_name: budapest-go-2
     expose:
