@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Create network
-        run: docker network create budapest2network
+        run: docker network create budapestgo2network
 
       - uses: actions/checkout@v3
 
