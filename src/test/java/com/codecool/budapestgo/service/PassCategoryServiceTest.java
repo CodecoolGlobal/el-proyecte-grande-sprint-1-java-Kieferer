@@ -2,6 +2,7 @@ package com.codecool.budapestgo.service;
 
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryRegisterDTO;
 import com.codecool.budapestgo.controller.dto.pass.PassCategoryResponseDTO;
+import com.codecool.budapestgo.customExceptionHandler.NotFoundException;
 import com.codecool.budapestgo.dao.model.PassCategory;
 import com.codecool.budapestgo.dao.repository.PassCategoryRepository;
 import com.codecool.budapestgo.utils.DtoMapper;
@@ -35,8 +36,8 @@ class PassCategoryServiceTest {
     @Test
     void testGetAllPassCategory() {
         List<PassCategory> passCategories = new ArrayList<>();
-        passCategories.add(buildPassCategory(1L, "Category 1", "Duration 1",3L,100));
-        passCategories.add(buildPassCategory(2L, "Category 2", "Duration 2", 4L,200));
+        passCategories.add(buildPassCategory(1L, "Category 1", "Duration 1", 3L, 100));
+        passCategories.add(buildPassCategory(2L, "Category 2", "Duration 2", 4L, 200));
         when(passCategoryRepository.findAll()).thenReturn(passCategories);
 
         List<PassCategoryResponseDTO> result = passCategoryService.getAllPassCategory();
@@ -49,7 +50,7 @@ class PassCategoryServiceTest {
 
     @Test
     void testAddPassCategory() {
-        PassCategoryRegisterDTO registerDTO = new PassCategoryRegisterDTO("Category 1", "Duration 1",1L,100);
+        PassCategoryRegisterDTO registerDTO = new PassCategoryRegisterDTO("Category 1", "Duration 1", 1L, 100);
         PassCategory passCategory = DtoMapper.toEntity(registerDTO);
         when(passCategoryRepository.findByCategoryAndPassDuration(registerDTO.category(), registerDTO.passDuration()))
                 .thenReturn(Optional.empty());
@@ -64,12 +65,34 @@ class PassCategoryServiceTest {
 
     @Test
     void testAddPassCategoryWhenCategoryExist() {
-        PassCategoryRegisterDTO registerDTO =  new PassCategoryRegisterDTO("Category 1", "Duration 1",1L,100);
+        PassCategoryRegisterDTO registerDTO = new PassCategoryRegisterDTO("Category 1", "Duration 1", 1L, 100);
         when(passCategoryRepository.findByCategoryAndPassDuration(registerDTO.category(), registerDTO.passDuration()))
-                .thenReturn(Optional.of(buildPassCategory(1L, "Category 1", "Duration 1",1L,100)));
+                .thenReturn(Optional.of(buildPassCategory(1L, "Category 1", "Duration 1", 1L, 100)));
 
         assertThrows(DataIntegrityViolationException.class, () -> passCategoryService.addPassCategory(registerDTO));
         verify(passCategoryRepository, never()).save(any(PassCategory.class));
+    }
+
+    @Test
+    void testDeletePassCategoryById() {
+        Long categoryId = 1L;
+        when(passCategoryRepository.findById(categoryId)).thenReturn(
+                Optional.of(buildPassCategory(1L, "Category 1", "Duration 1", 1L, 100)));
+
+        ResponseEntity<String> response = passCategoryService.deletePassCategoryById(categoryId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Deleted successfully", response.getBody());
+        verify(passCategoryRepository, times(1)).deleteById(categoryId);
+    }
+
+    @Test
+    void testDeletePassCategoryByIdThrowsNotFound() {
+        Long categoryId = 1L;
+        when(passCategoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> passCategoryService.deletePassCategoryById(categoryId));
+        verify(passCategoryRepository, never()).deleteById(categoryId);
     }
 
     private PassCategory buildPassCategory(Long id, String category, String duration, Long expire, Integer price) {
