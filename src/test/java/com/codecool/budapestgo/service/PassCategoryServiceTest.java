@@ -119,7 +119,26 @@ class PassCategoryServiceTest {
         verify(passCategoryRepository, never()).saveAndFlush(any(PassCategory.class));
     }
 
-   
+    @Test
+    void testGetPassCategoryByNameAndDuration() {
+        String category = "Category 1";
+        String duration = "Duration 1";
+        PassCategory passCategory = buildPassCategory(1L, category, duration,1L,100);
+        when(passCategoryRepository.findByCategoryAndPassDuration(category, duration)).thenReturn(Optional.of(passCategory));
+
+        PassCategory result = passCategoryService.getPassCategoryByNameAndDuration(category, duration);
+
+        assertEquals(passCategory, result);
+    }
+
+    @Test
+    void testGetPassCategoryByNameAndDurationNotFound() {
+        String category = "Category 1";
+        String duration = "Duration 1";
+        when(passCategoryRepository.findByCategoryAndPassDuration(category, duration)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> passCategoryService.getPassCategoryByNameAndDuration(category, duration));
+    }
 
     private PassCategory buildPassCategory(Long id, String category, String duration, Long expire, Integer price) {
         return PassCategory.builder()
