@@ -21,6 +21,7 @@ The application has a site for 'customers' which passangers can use to get infor
   - JPA Hibernate, 
   - Lombok
   - Google OAuth2
+ 
  Frontend
   - JavaScript
   - React
@@ -33,7 +34,7 @@ The application has a site for 'customers' which passangers can use to get infor
 
 ## Features
 
-User Registration and Authentication: Users can create accounts and securely log in to the platform to ask and answer questions. On the other hand for the employees the admin registrates them into the database.
+User Registration and Authentication
 
 Route Search Functionality: The users can search for routes and stops and check which routes go through on the selected stop. The employees can create and modify both the routes and stops as well.
 
@@ -48,16 +49,25 @@ Follow these instructions to get a copy of the BudapestGo2 project up and runnin
 ## Prerequisites
 
  * Java Development Kit (JDK)
- * Spring Framework
  * JDBC Database (e.g., PostgreSQL)
  * Any required dependencies as specified in the project configuration
 
 ## Installation
 
 Clone the repository: git clone https://github.com/CodecoolGlobal/el-proyecte-grande-sprint-1-java-Kieferer
-Configure the project with the necessary environment variables and database connection details.
+
+Once you have cloned the repository, you need to configure the project by providing the necessary environment variables and database connection details. This includes setting up the database connection URL, username, and password, as well as any other environment-specific configuration values in the docker-compose.yml and the application.properties which located in src/main/resources. Make sure to update these files with the appropriate values.
+
 Build and run the project using your preferred development environment or command-line tools.
-Access the application through the provided URL and create your account to start asking and answering questions.
+Using Maven: Open a terminal or command prompt, navigate to the project's root directory, and run the following command:
+```bash
+mvn spring-boot:run
+```
+This command will build the project, resolve the dependencies, and start the server.
+
+Once the server is up and running, you can access the BudapestGo2 application through the provided URL. Open a web browser and enter the appropriate URL (e.g., http://localhost:8080) to access the application.
+
+
 
 
   
